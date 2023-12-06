@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -20,6 +21,8 @@ public class LoginPageController {
     PasswordField password;
     @FXML
     Label correctInfo;
+    @FXML
+    CheckBox stayConnected;
     private Parent root;
     private Stage stage;
     private Scene scene;
