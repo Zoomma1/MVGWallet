@@ -14,13 +14,28 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * The type Login page controller.
+ */
 public class LoginPageController {
+    /**
+     * The Username.
+     */
     @FXML
     TextField username;
+    /**
+     * The Password.
+     */
     @FXML
     PasswordField password;
+    /**
+     * The Correct info.
+     */
     @FXML
     Label correctInfo;
+    /**
+     * The Stay connected.
+     */
     @FXML
     CheckBox stayConnected;
     private Parent root;
@@ -28,6 +43,12 @@ public class LoginPageController {
     private Scene scene;
     private CSVLogin csvLogin = new CSVLogin();
 
+    /**
+     * Login on action.
+     *
+     * @param event the event
+     * @throws IOException the io exception
+     */
     public void loginOnAction(ActionEvent event) throws IOException {
         if(username != null && password != null && !username.getText().equals("") && !password.getText().equals("")){
             if(csvLogin.isUserCorrect(username.getText(),password.getText())){
@@ -44,6 +65,12 @@ public class LoginPageController {
         }
     }
 
+    /**
+     * Register on action.
+     *
+     * @param event the event
+     * @throws IOException the io exception
+     */
     public void registerOnAction(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("RegisterPage.fxml"));
         root = loader.load();
