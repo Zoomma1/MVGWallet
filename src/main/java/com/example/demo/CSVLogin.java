@@ -3,6 +3,8 @@ package com.example.demo;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
+import java.security.MessageDigest;
 import java.util.Scanner;
 
 public class CSVLogin {
@@ -41,7 +43,7 @@ public class CSVLogin {
                 }
                 String[] data = this.getData();
                 String[] dataToWrite = new String[data.length+1];
-                for (int i = 0; i < data.length; i++) {
+                for(int i = 0; i < data.length; i++) {
                     dataToWrite[i]=data[i];
                 }
                 dataToWrite[data.length] = newUserData;
@@ -58,11 +60,31 @@ public class CSVLogin {
     public Boolean isUserCorrect(String username, String password) {
         String[] data = this.getData();
         for (String currentLine : data) {
-            if (!currentLine.isEmpty() && currentLine.split(",")[0].equals(username) && currentLine.split(",")[2].equals(password)) {
+            if (!currentLine.isEmpty() && currentLine.split(",")[0].equals(username) && currentLine.split(",")[2].equals(encryptPassword(password))) {
                 return true;
             }
         }
         return false;
     }
 
+    public String encryptPassword(String password){
+        String encyptedPassword = null;
+        try
+        {
+            MessageDigest m = MessageDigest.getInstance("MD5");
+            m.update(password.getBytes());
+            byte[] bytes = m.digest();
+            StringBuilder s = new StringBuilder();
+            for(int i=0; i< bytes.length ;i++)
+            {
+                s.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            encyptedPassword = s.toString();
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+        return encyptedPassword;
+    }
 }
