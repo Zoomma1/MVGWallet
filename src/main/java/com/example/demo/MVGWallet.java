@@ -13,6 +13,7 @@ import java.io.IOException;
  *                                                                                   *
  *GERMAIN Victor @Zoomma1/@Kirat0s                                                   *
  *************************************************************************************/
+
 public class MVGWallet extends Application {
     @Override
     public void start(Stage stage) throws IOException {
