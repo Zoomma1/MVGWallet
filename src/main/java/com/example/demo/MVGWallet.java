@@ -8,9 +8,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/**
- * The type Mvg wallet.
- */
+/*************************************************************************************
+ *This is the application class it is used to launch the application                 *
+ *                                                                                   *
+ *GERMAIN Victor @Zoomma1/@Kirat0s                                                   *
+ *************************************************************************************/
 public class MVGWallet extends Application {
     @Override
     public void start(Stage stage) throws IOException {
@@ -25,11 +27,6 @@ public class MVGWallet extends Application {
         }
     }
 
-    /**
-     * The entry point of application.
-     *
-     * @param args the input arguments
-     */
     public static void main(String[] args) {
         launch();
     }

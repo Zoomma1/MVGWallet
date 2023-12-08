@@ -3,30 +3,13 @@ package com.example.demo;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * The type Email.
- */
 public class Email {
-    /**
-     * The Email.
-     */
     String email;
 
-    /**
-     * Instantiates a new Email.
-     *
-     * @param email the email
-     */
     public Email(String email) {
         this.email = email;
     }
 
-    /**
-     * Is email valid boolean.
-     *
-     * @param email the email
-     * @return the boolean
-     */
     public static boolean isEmailValid(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pattern = Pattern.compile(emailRegex);
@@ -34,13 +17,7 @@ public class Email {
         return matcher.matches();
     }
 
-    /**
-     * Send email.
-     *
-     * @param email   the email
-     * @param message the message
-     */
     public void sendEmail(Email email,String message){
-        //Add sendEmail method
+        //todo sendEmail method
     }
 }
