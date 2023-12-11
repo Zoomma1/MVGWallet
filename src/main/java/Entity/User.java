@@ -1,5 +1,6 @@
 package Entity;
-/*
+
+/**
 * Create User object if Login is true
 *
 * Fonctionnement:
@@ -9,7 +10,7 @@ package Entity;
 * Implementer un template différent lors de l'anniversaire
 *
 * Mathys Haubert
-*/
+**/
 public class User {
     private String userName;
 
@@ -43,7 +44,7 @@ public class User {
         /* to-do */
     }
 
-    public void setEmail(Email email){
+    public void setEmail(){
         /*to do too*/
     }
 }

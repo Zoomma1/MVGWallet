@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import Entity.Email.EmailUtility;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,6 +9,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**/
+
+import javax.mail.internet.MimeMessage;
 /**
  * The type Mvg wallet.
  */
@@ -30,7 +34,8 @@ public class MVGWallet extends Application {
      *
      * @param args the input arguments
      */
-    public static void main(String[] args) {
-        launch();
+    public static void main(String[] args) throws Exception {
+        /*launch();*/
+        EmailUtility.sendEmail("goebbelsvictor@","MVG Wallet teste","ça fontionne !");
     }
 }

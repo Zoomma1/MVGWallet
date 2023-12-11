@@ -4,16 +4,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The type Email.
+ * The type Entity.Email.Email.
  */
 public class Email {
     /**
-     * The Email.
+     * The Entity.Email.Email.
      */
     String email;
 
     /**
-     * Instantiates a new Email.
+     * Instantiates a new Entity.Email.Email.
      *
      * @param email the email
      */

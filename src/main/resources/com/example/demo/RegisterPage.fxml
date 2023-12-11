@@ -21,7 +21,7 @@
             <Font name="Liberation Mono" size="29.0" />
          </font>
       </TextField>
-      <TextField fx:id="email" layoutX="725.0" layoutY="372.0" prefHeight="64.0" prefWidth="381.0" promptText="Email" style="-fx-background-color: #ffffff; -fx-pref-height: 68; -fx-pref-width: 443; -fx-translate-y: 3; -fx-translate-x: -1; -fx-background-radius: 40;">
+      <TextField fx:id="email" layoutX="725.0" layoutY="372.0" prefHeight="64.0" prefWidth="381.0" promptText="Entity.Email.Email" style="-fx-background-color: #ffffff; -fx-pref-height: 68; -fx-pref-width: 443; -fx-translate-y: 3; -fx-translate-x: -1; -fx-background-radius: 40;">
          <font>
             <Font name="Liberation Mono" size="29.0" />
          </font>

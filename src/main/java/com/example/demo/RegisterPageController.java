@@ -23,7 +23,7 @@ public class RegisterPageController {
     @FXML
     TextField username;
     /**
-     * The Email.
+     * The Entity.Email.Email.
      */
     @FXML
     TextField email;
