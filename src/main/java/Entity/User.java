@@ -1,5 +1,11 @@
 package Entity;
 
+import Entity.Email.EmailUtility;
+
+import javax.mail.MessagingException;
+import javax.security.auth.Subject;
+import java.io.IOException;
+
 /**
 * Create User object if Login is true
 *
@@ -44,7 +50,21 @@ public class User {
         /* to-do */
     }
 
-    public void setEmail(){
+    public void setEmail(String newEmail){
+        if(EmailUtility.isEmailValid(newEmail)){
+            /* faire le insert en SQL */
+        }
         /*to do too*/
+    }
+    public void sendEmail(String subject, String content) throws MessagingException, IOException, InterruptedException {
+        EmailUtility.sendEmail(this.email, subject,content);
+    }
+    public void sendLoginEmail() throws MessagingException, IOException, InterruptedException {
+        String subject = String.format("[MVG Wallet] Alerte de sécurité pour %s",this.email);
+        String content = String.format("Bonjour %s.\\n\\n" +
+                "Nous avons détecté une nouvelle connexion à votre compte MVG Wallet. " +
+                "Si c'était vous, aucune action de votre pas n'est requise. Dans le cas contraire, nous vous invitons à contacter un administrateur. \\n\\n" +
+                "L'équipe MVG Wallet.",this.userName);
+        EmailUtility.sendEmail(this.email, subject,content);
     }
 }
