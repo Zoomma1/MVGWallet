@@ -7,15 +7,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.MessageDigest;
 import java.util.Scanner;
 
-/**
- * The type Csv login.
- */
 public class CSVLogin {
     private String filePath = "src/main/resources/com/example/demo/LoginDatas.csv";
 
-    /**
-     * Instantiates a new Csv login.
-     */
     public CSVLogin() {
     }
 
@@ -41,11 +35,6 @@ public class CSVLogin {
         return out.split("\n");
     }
 
-    /**
-     * Set new user data.
-     *
-     * @param newUserData the new user data
-     */
     public void setNewUserData(String newUserData){
             File file = new File(filePath);
             try{
@@ -68,13 +57,6 @@ public class CSVLogin {
             }
     }
 
-    /**
-     * Is user correct boolean.
-     *
-     * @param username the username
-     * @param password the password
-     * @return the boolean
-     */
     public Boolean isUserCorrect(String username, String password) {
         String[] data = this.getData();
         for (String currentLine : data) {
@@ -85,12 +67,6 @@ public class CSVLogin {
         return false;
     }
 
-    /**
-     * Encrypt password string.
-     *
-     * @param password the password
-     * @return the string
-     */
     public String encryptPassword(String password){
         String encyptedPassword = null;
         try
