@@ -23,20 +23,8 @@ public abstract class NavBarController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(pageFXML));
         root = loader.load();
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-        double currentWidth = stage.getWidth();
-        double currentHeight = stage.getHeight();
-
-        scene = new Scene(root, currentWidth , currentHeight);
-        scene.getStylesheets().addAll(stage.getScene().getStylesheets());
-        scene.setFill(stage.getScene().getFill());
+        scene = new Scene(root);
         stage.setScene(scene);
-
-        stage.setWidth(currentWidth);
-        stage.setHeight(currentHeight);
-        stage.setMinHeight(800);
-        stage.setMinWidth(900);
-
         stage.show();
     }
 

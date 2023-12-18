@@ -10,14 +10,9 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Objects;
-
-import static javafx.scene.input.KeyCode.ENTER;
-
 /*************************************************************************************
  *This is the LoginPageController class it is used to control the LoginPage          *
  *                                                                                   *
@@ -35,18 +30,15 @@ public class LoginPageController {
     private Parent root;
     private Stage stage;
     private Scene scene;
-    private final CSVLogin csvLogin = new CSVLogin();
-
+    private CSVLogin csvLogin = new CSVLogin();
 
     public void loginOnAction(ActionEvent event) throws IOException {
-        if(username != null && password != null && !username.getText().isEmpty() && !password.getText().isEmpty()){
+        if(username != null && password != null && !username.getText().equals("") && !password.getText().equals("")){
             if(csvLogin.isUserCorrect(username.getText(),password.getText())){
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("DashboardPage.fxml"));
                 root = loader.load();
                 stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-                double currentWidth = stage.getWidth();
-                double currentHeight = stage.getHeight();
-                scene = new Scene(root, currentWidth , currentHeight);
+                scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();
                 correctInfo.setVisible(false);
@@ -60,33 +52,8 @@ public class LoginPageController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("RegisterPage.fxml"));
         root = loader.load();
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        double currentWidth = stage.getWidth();
-        double currentHeight = stage.getHeight();
-        scene = new Scene(root, currentWidth , currentHeight);
+        scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-    }
-
-    public void loginOnEnter(KeyEvent keyEvent) throws IOException {
-        if(keyEvent.getCode() == ENTER){
-            if(username != null && password != null && !username.getText().isEmpty() && !password.getText().isEmpty()){
-                if(csvLogin.isUserCorrect(username.getText(),password.getText())){
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("DashboardPage.fxml"));
-                    root = loader.load();
-                    stage = (Stage)((Node)keyEvent.getSource()).getScene().getWindow();
-                    double currentWidth = stage.getWidth();
-                    double currentHeight = stage.getHeight();
-                    scene = new Scene(root, currentWidth , currentHeight);
-                    stage.setScene(scene);
-                    stage.show();
-                    correctInfo.setVisible(false);
-                }else {
-                    correctInfo.setVisible(true);
-                }
-            }
-        }
-    }
-
-    public void stayConnected(){
     }
 }

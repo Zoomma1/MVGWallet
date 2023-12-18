@@ -41,36 +41,11 @@ public class RegisterPageController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginPage.fxml"));
             root = loader.load();
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            double currentWidth = stage.getWidth();
-            double currentHeight = stage.getHeight();
-
-            scene = new Scene(root, currentWidth , currentHeight);
-            scene.getStylesheets().addAll(stage.getScene().getStylesheets());
-            scene.setFill(stage.getScene().getFill());
+            scene = new Scene(root);
             stage.setScene(scene);
-
-            stage.setWidth(currentWidth);
-            stage.setHeight(currentHeight);
             stage.show();
         }else{
             correctInfo.setVisible(true);
         }
-    }
-
-    public void backOnAction(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginPage.fxml"));
-        root = loader.load();
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        double currentWidth = stage.getWidth();
-        double currentHeight = stage.getHeight();
-
-        scene = new Scene(root, currentWidth , currentHeight);
-        scene.getStylesheets().addAll(stage.getScene().getStylesheets());
-        scene.setFill(stage.getScene().getFill());
-        stage.setScene(scene);
-
-        stage.setWidth(currentWidth);
-        stage.setHeight(currentHeight);
-        stage.show();
     }
 }
