@@ -34,4 +34,10 @@ public class MyAccountController extends NavBarController{
     public void overviewOnAction(ActionEvent event) throws IOException {
         switchPage(event, "OverviewPage.fxml");
     }
+
+    public void disconnectOnAction(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginPage.fxml"));
+        LoginPageController loginPageController = loader.getController();
+        switchPage(event, "LoginPage.fxml");
+    }
 }
