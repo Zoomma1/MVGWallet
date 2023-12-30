@@ -8,8 +8,7 @@ module com.example.demo {
 
     requires javax.mail;
     requires jdk.httpserver;
-    requires java.net.http;
-
+    requires javafx.web;
 
     opens com.example.demo to javafx.fxml;
     exports com.example.demo;

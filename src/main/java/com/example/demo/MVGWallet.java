@@ -22,14 +22,14 @@ import java.util.TreeMap;
 
 public class MVGWallet extends Application {
     @Override
-    public void start(Stage stage) throws IOException, InterruptedException, ParseException {
+    public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginPage.fxml"));
         Parent root = loader.load();
         LoginPageController loginPageController = loader.getController();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setMinHeight(800);
-        stage.setMinWidth(900);
+        stage.setMinWidth(1160);
         stage.show();
         }
 

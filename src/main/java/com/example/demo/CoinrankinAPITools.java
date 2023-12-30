@@ -26,7 +26,6 @@ public class CoinrankinAPITools {
 
     public void getCoinPrice() throws IOException, InterruptedException {
         String  jsonString = getFiftyBestCoins();
-        System.out.println(jsonString);
         JSONParser parser = new JSONParser();
 
         try {
@@ -86,10 +85,14 @@ public class CoinrankinAPITools {
 
         return null; // Return null if the token is not found
     }
+
     public double convertUSDToEUR(Double price) throws IOException, InterruptedException {
         RealTimeFinanceDataAPITools realTimeFinanceDataAPITools = new RealTimeFinanceDataAPITools();
         Double conversionRate = realTimeFinanceDataAPITools.getUSDToEURExchangeRate();
         return price*conversionRate;
     }
 
+    public void getFiftyBestCoinSparkLine(){
+
+    }
 }
