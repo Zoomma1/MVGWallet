@@ -86,7 +86,4 @@
          </content>
       </ScrollPane>
    </center>
-   <top>
-      <Button mnemonicParsing="false" onAction="#testOnAction" text="Button" BorderPane.alignment="CENTER" />
-   </top>
 </BorderPane>

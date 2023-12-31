@@ -9,23 +9,23 @@ import java.io.IOException;
  *************************************************************************************/
 public class OverviewPageController extends NavBarController{
 
-    public void dashboardOnAction(ActionEvent event) throws IOException {
+    public void dashboardOnAction(ActionEvent event) throws IOException, InterruptedException {
         switchPage(event, "DashboardPage.fxml");
     }
 
-    public void cryptocurrencyOnAction(ActionEvent event) throws IOException {
+    public void cryptocurrencyOnAction(ActionEvent event) throws IOException, InterruptedException {
         switchPage(event, "CryptocurrencyPage.fxml");
     }
 
-    public void stockOnAction(ActionEvent event) throws IOException {
+    public void stockOnAction(ActionEvent event) throws IOException, InterruptedException {
         switchPage(event, "StockPage.fxml");
     }
 
-    public void tradesOnAction(ActionEvent event) throws IOException {
+    public void tradesOnAction(ActionEvent event) throws IOException, InterruptedException {
         switchPage(event, "TradesPage.fxml");
     }
 
-    public void myAccountOnAction(ActionEvent event) throws IOException {
+    public void myAccountOnAction(ActionEvent event) throws IOException, InterruptedException {
         switchPage(event, "MyAccountPage.fxml");
     }
 }

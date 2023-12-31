@@ -30,24 +30,24 @@ public class DashboardController extends NavBarController{
     @FXML
     ScrollPane scrollPane;
 
-    public void cryptocurrencyOnAction(ActionEvent event) throws IOException {
+    public void cryptocurrencyOnAction(ActionEvent event) throws IOException, InterruptedException {
         switchPage(event, "CryptocurrencyPage.fxml");
     }
 
-    public void stockOnAction(ActionEvent event) throws IOException {
+    public void stockOnAction(ActionEvent event) throws IOException, InterruptedException {
         switchPage(event, "StockPage.fxml");
     }
 
-    public void tradesOnAction(ActionEvent event) throws IOException {
+    public void tradesOnAction(ActionEvent event) throws IOException, InterruptedException {
         switchPage(event, "TradesPage.fxml");
     }
 
-    public void overviewOnAction(ActionEvent event) throws IOException {
+    public void overviewOnAction(ActionEvent event) throws IOException, InterruptedException {
         switchPage(event, "OverviewPage.fxml");
 
     }
 
-    public void myAccountOnAction(ActionEvent event) throws IOException {
+    public void myAccountOnAction(ActionEvent event) throws IOException, InterruptedException {
         switchPage(event, "MyAccountPage.fxml");
     }
 

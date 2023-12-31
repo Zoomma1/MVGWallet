@@ -62,15 +62,15 @@
 .vBoxCryptoPage {
     -fx-background-color: #010831;
     -fx-background-radius: 30;
-    -fx-pref-height: 260;
-    -fx-pref-width: 360;
+    -fx-pref-height: 350;
+    -fx-pref-width: 350;
 }
 
 .hBoxCryptoPage {
     -fx-background-color: #004d8c;
     -fx-background-radius: 0 0 30 30;
-    -fx-pref-height: 340;
-    -fx-pref-width: 360;
+    -fx-pref-height: 240;
+    -fx-pref-width: 350;
 }
 
 .lineChartPreview {
