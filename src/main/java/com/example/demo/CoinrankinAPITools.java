@@ -55,18 +55,41 @@ public class CoinrankinAPITools {
         return response.body();
     }
 
-    public String getCoinPriceHistory(String uuid, String timeperiod) throws IOException, InterruptedException {
+    public String[] getCoinPriceHistory(String uuid, String timeperiod) throws IOException, InterruptedException, ParseException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://coinranking1.p.rapidapi.com/coin/Qwsogvtv82FCd/history?referenceCurrencyUuid=" + uuid + "&timePeriod=" + timeperiod))
+                .uri(URI.create("https://coinranking1.p.rapidapi.com/coin/" + uuid + "?referenceCurrencyUuid=yhjMzLPhuIDl&timePeriod=" + timeperiod))
                 .header("X-RapidAPI-Key", "11b63e8be8msh319854639b88765p157ae7jsn499f64df1c02")
                 .header("X-RapidAPI-Host", "coinranking1.p.rapidapi.com")
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        return response.body();
+
+        String jsonString = response.body();
+        JSONParser jsonParser = new JSONParser();
+
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonString);
+        JSONObject coinData = (JSONObject) jsonObject.get("data");
+        JSONObject coin = (JSONObject) coinData.get("coin");
+        JSONArray sparklineArray = (JSONArray) coin.get("sparkline");
+
+        int size = sparklineArray.size();
+        String[] sparkline = new String[size];
+
+        for (int i = 0; i < size; i++) {
+            sparkline[i] = sparklineArray.get(i).toString();
+        }
+        return sparkline;
     }
 
-    public String getUUIDByToken(String token, String jsonString) throws IOException, InterruptedException {
+    public String getUUIDByToken(String token) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://coinranking1.p.rapidapi.com/coins?referenceCurrencyUuid=yhjMzLPhuIDl&timePeriod=24h&tiers%5B0%5D=1&orderBy=marketCap&orderDirection=desc&limit=50&offset=0"))
+                .header("X-RapidAPI-Key", "11b63e8be8msh319854639b88765p157ae7jsn499f64df1c02")
+                .header("X-RapidAPI-Host", "coinranking1.p.rapidapi.com")
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        String jsonString = response.body();
         JSONParser parser = new JSONParser();
 
         try {
@@ -86,13 +109,29 @@ public class CoinrankinAPITools {
         return null; // Return null if the token is not found
     }
 
+    public double convertFromBtcToUsdt(double tokenBTCprice) throws IOException, InterruptedException, ParseException {
+        JSONParser parser = new JSONParser();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://coinranking1.p.rapidapi.com/coin/Qwsogvtv82FCd/price?referenceCurrencyUuid=yhjMzLPhuIDl"))
+                .header("X-RapidAPI-Key", "11b63e8be8msh319854639b88765p157ae7jsn499f64df1c02")
+                .header("X-RapidAPI-Host", "coinranking1.p.rapidapi.com")
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+        String jsonString = response.body();
+        JSONObject json = (JSONObject) parser.parse(jsonString);
+        JSONArray coinsArray = (JSONArray) ((JSONObject) json.get("data")).get("coins");
+        double convertionRate = Double.parseDouble(((JSONObject) coinsArray.get(0)).get("price").toString());
+
+        return tokenBTCprice*convertionRate;
+
+    }
     public double convertUSDToEUR(Double price) throws IOException, InterruptedException {
         RealTimeFinanceDataAPITools realTimeFinanceDataAPITools = new RealTimeFinanceDataAPITools();
         Double conversionRate = realTimeFinanceDataAPITools.getUSDToEURExchangeRate();
         return price*conversionRate;
     }
 
-    public void getFiftyBestCoinSparkLine(){
-
-    }
 }

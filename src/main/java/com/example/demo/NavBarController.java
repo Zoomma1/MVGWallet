@@ -19,6 +19,9 @@ public abstract class NavBarController {
     protected Stage stage;
     protected Scene scene;
 
+    public NavBarController() {
+    }
+
     public void switchPage(ActionEvent event, String pageFXML) throws IOException, InterruptedException {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource(pageFXML));
@@ -39,5 +42,8 @@ public abstract class NavBarController {
         stage.setMinWidth(900);
 
         stage.show();
+    }
+
+    public void initialize() throws InterruptedException, IOException {
     }
 }

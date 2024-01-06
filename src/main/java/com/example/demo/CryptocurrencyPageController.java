@@ -23,8 +23,9 @@ public class CryptocurrencyPageController extends NavBarController{
     TilePane tilePane;
     @FXML
     ScrollPane scrollPane;
+    CoinrankinAPITools coinrankinAPITools = new CoinrankinAPITools();
 
-    public void initialize() throws IOException, InterruptedException {
+    public void initialize() throws InterruptedException, IOException {
         displayFiftyBestCoins();
     }
 
@@ -48,7 +49,6 @@ public class CryptocurrencyPageController extends NavBarController{
         switchPage(event, "MyAccountPage.fxml");
     }
 
-//  todo : make lineChart 'interactive' (show the value of a point on hover)
     public void createNewCryptoTile(String symbol, String iconUrl, Double price, Double change, String[] sparkline){
         tilePane.setHgap(15);
         tilePane.setVgap(15);
@@ -56,8 +56,8 @@ public class CryptocurrencyPageController extends NavBarController{
         tilePane.getChildren().add((new Tile(symbol,iconUrl,price,change,sparkline)).displayTile());
     }
 
+//  todo: fix responsive on page change (this page is going back to pref size)
     public void displayFiftyBestCoins() throws IOException, InterruptedException {
-        CoinrankinAPITools coinrankinAPITools = new CoinrankinAPITools();
         String jsonString = coinrankinAPITools.getFiftyBestCoins();
         JSONParser parser = new JSONParser();
 

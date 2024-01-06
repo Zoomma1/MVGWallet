@@ -1,20 +1,15 @@
 package com.example.demo;
 
-import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
 import java.io.IOException;
@@ -29,6 +24,11 @@ public class DashboardController extends NavBarController{
     TilePane tilePane;
     @FXML
     ScrollPane scrollPane;
+
+    @Override
+    public void initialize() throws InterruptedException, IOException {
+        super.initialize();
+    }
 
     public void cryptocurrencyOnAction(ActionEvent event) throws IOException, InterruptedException {
         switchPage(event, "CryptocurrencyPage.fxml");
