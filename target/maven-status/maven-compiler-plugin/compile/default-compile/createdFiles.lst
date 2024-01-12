@@ -1,0 +1,15 @@
+com/example/demo/CSVLogin.class
+com/example/demo/NavBarController.class
+com/example/demo/RegisterPageController.class
+Entity/User.class
+com/example/demo/OverviewPageController.class
+module-info.class
+com/example/demo/MVGWallet.class
+com/example/demo/DashboardController.class
+Entity/Email/EmailUtility.class
+com/example/demo/LoginPageController.class
+com/example/demo/StockPageController.class
+com/example/demo/TradesPageController.class
+com/example/demo/MyAccountController.class
+com/example/demo/Email.class
+com/example/demo/CryptocurrencyPageController.class
