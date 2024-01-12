@@ -3,9 +3,7 @@ package Entity;
 import Entity.Email.EmailUtility;
 
 import javax.mail.MessagingException;
-import javax.security.auth.Subject;
 import java.io.IOException;
-
 /**
 * Create User object if Login is true
 *
@@ -17,12 +15,12 @@ import java.io.IOException;
 *
 * Mathys Haubert
 **/
-public class User {
-    private String userName;
+public class User extends UserSQL{
+    protected String userName;
 
-    private String email;
+    protected String email;
 
-    private int age;
+    protected int age;
 
     public User(
             String userName,

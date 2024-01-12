@@ -6,10 +6,13 @@
 /home/mathys/Documents/GitHub/MVGWallet/src/main/java/com/example/demo/CSVLogin.java
 /home/mathys/Documents/GitHub/MVGWallet/src/main/java/com/example/demo/DashboardController.java
 /home/mathys/Documents/GitHub/MVGWallet/src/main/java/com/example/demo/MVGWallet.java
+/home/mathys/Documents/GitHub/MVGWallet/src/main/java/com/example/demo/CoinrankinAPITools.java
 /home/mathys/Documents/GitHub/MVGWallet/src/main/java/module-info.java
 /home/mathys/Documents/GitHub/MVGWallet/src/main/java/com/example/demo/CryptocurrencyPageController.java
 /home/mathys/Documents/GitHub/MVGWallet/src/main/java/Entity/User.java
+/home/mathys/Documents/GitHub/MVGWallet/src/main/java/com/example/demo/RealTimeFinanceDataAPITools.java
 /home/mathys/Documents/GitHub/MVGWallet/src/main/java/com/example/demo/NavBarController.java
 /home/mathys/Documents/GitHub/MVGWallet/src/main/java/com/example/demo/MyAccountController.java
 /home/mathys/Documents/GitHub/MVGWallet/src/main/java/com/example/demo/TradesPageController.java
+/home/mathys/Documents/GitHub/MVGWallet/src/main/java/Entity/UserSQL.java
 /home/mathys/Documents/GitHub/MVGWallet/src/main/java/com/example/demo/LoginPageController.java
