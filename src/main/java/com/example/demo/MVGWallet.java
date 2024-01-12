@@ -11,12 +11,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-/**/
-
-import javax.mail.internet.MimeMessage;
-/**
- * The type Mvg wallet.
- */
 public class MVGWallet extends Application {
     @Override
     public void start(Stage stage) throws IOException {
@@ -30,13 +24,3 @@ public class MVGWallet extends Application {
             e.printStackTrace();
         }
     }
-
-    /**
-     * The entry point of application.
-     *
-     * @param args the input arguments
-     */
-    public static void main(String[] args) throws Exception {
-        /*launch();*/
-        new User("blackl0ok","victorgerm1@hotmail.fr",20).sendLoginEmail();}
-}
