@@ -9,9 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.effect.Light;
 import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
-
 import java.io.IOException;
-
 import java.util.TreeMap;
 
 /*************************************************************************************
@@ -37,5 +35,3 @@ public class MVGWallet extends Application {
         launch();
     }
 }
-
-
