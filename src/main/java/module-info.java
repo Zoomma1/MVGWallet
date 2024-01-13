@@ -9,6 +9,7 @@ module com.example.demo {
     requires javax.mail;
     requires jdk.httpserver;
     requires javafx.web;
+    requires java.desktop;
 
     opens com.example.demo to javafx.fxml;
     exports com.example.demo;

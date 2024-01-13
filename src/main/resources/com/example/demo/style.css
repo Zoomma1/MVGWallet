@@ -93,3 +93,35 @@
     -fx-pref-width: 50;
     -fx-pref-height: 50;
 }
+
+.titled-pane {
+    -fx-background-color: transparent;
+    -fx-background-radius: 20;
+}
+
+.titled-pane .title {
+    -fx-background-color: #2980b9;
+    -fx-background-radius: 10 10 0 0;
+}
+
+.titled-pane .content{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-background-color: transparent;
+}
+
+.vBoxNewsTile{
+    -fx-background-color: #07148a;
+    -fx-background-radius: 20;
+}
+
+.scrollPaneOverview{
+    -fx-background:  #010831;
+    -fx-background-color:  #010831;
+    -fx-border-color:  #010831;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+}
