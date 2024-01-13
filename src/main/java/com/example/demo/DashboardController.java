@@ -58,6 +58,7 @@ public class DashboardController extends NavBarController{
     }
 
     public void walletTileCreation(String walletName){
+//      todo: create wallets using the user owned wallets and display a sparkline base on its value over time (I think we will display them with a one day interval)
         VBox vBox = new VBox();
         VBox vBowWalletValues = new VBox();
         HBox hBox = new HBox();

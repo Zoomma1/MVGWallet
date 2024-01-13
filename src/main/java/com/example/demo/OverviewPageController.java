@@ -28,4 +28,5 @@ public class OverviewPageController extends NavBarController{
     public void myAccountOnAction(ActionEvent event) throws IOException, InterruptedException {
         switchPage(event, "MyAccountPage.fxml");
     }
+
 }

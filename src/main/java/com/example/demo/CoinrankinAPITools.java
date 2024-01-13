@@ -72,13 +72,20 @@ public class CoinrankinAPITools {
         JSONObject coin = (JSONObject) coinData.get("coin");
         JSONArray sparklineArray = (JSONArray) coin.get("sparkline");
 
-        int size = sparklineArray.size();
-        String[] sparkline = new String[size];
+        if (sparklineArray != null) {
+            int size = sparklineArray.size();
+            String[] sparkline = new String[size - 1];
 
-        for (int i = 0; i < size; i++) {
-            sparkline[i] = sparklineArray.get(i).toString();
+            for (int i = 0; i < size - 1; i++) {
+                Object value = sparklineArray.get(i);
+                sparkline[i] = value.toString();
+            }
+
+            return sparkline;
+        } else {
+            // Handle the case where sparklineArray is null (e.g., return an empty array or throw an exception)
+            return new String[0];
         }
-        return sparkline;
     }
 
     public String getUUIDByToken(String token) throws IOException, InterruptedException {
@@ -109,8 +116,8 @@ public class CoinrankinAPITools {
         return null; // Return null if the token is not found
     }
 
-    public double convertFromBtcToUsdt(double tokenBTCprice) throws IOException, InterruptedException, ParseException {
-        JSONParser parser = new JSONParser();
+    public double convertFromBtcToUsdt() throws IOException, InterruptedException, ParseException {
+        JSONParser jsonParser = new JSONParser();
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://coinranking1.p.rapidapi.com/coin/Qwsogvtv82FCd/price?referenceCurrencyUuid=yhjMzLPhuIDl"))
@@ -119,19 +126,9 @@ public class CoinrankinAPITools {
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-
-        String jsonString = response.body();
-        JSONObject json = (JSONObject) parser.parse(jsonString);
-        JSONArray coinsArray = (JSONArray) ((JSONObject) json.get("data")).get("coins");
-        double convertionRate = Double.parseDouble(((JSONObject) coinsArray.get(0)).get("price").toString());
-
-        return tokenBTCprice*convertionRate;
-
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(response.body());
+        JSONObject jsonData = (JSONObject) ((JSONObject) jsonObject.get("data"));
+        Object BTCPrice = jsonData.get("price");
+        return 1 / Double.parseDouble(BTCPrice.toString());
     }
-    public double convertUSDToEUR(Double price) throws IOException, InterruptedException {
-        RealTimeFinanceDataAPITools realTimeFinanceDataAPITools = new RealTimeFinanceDataAPITools();
-        Double conversionRate = realTimeFinanceDataAPITools.getUSDToEURExchangeRate();
-        return price*conversionRate;
-    }
-
 }

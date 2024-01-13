@@ -28,4 +28,6 @@ public class TradesPageController extends NavBarController{
     public void myAccountOnAction(ActionEvent event) throws IOException, InterruptedException {
         switchPage(event, "MyAccountPage.fxml");
     }
+//  todo: add the design to the page
+//  todo: get the user trades from the db and display them
 }

@@ -31,7 +31,6 @@
 
 .navBarStyle {
     -fx-background-color: linear-gradient(to bottom, #0984B1, transparent);
-    -fx-margin : 50% 0 100% 0;
 }
 
 .vBoxWalletDashboard{
@@ -69,7 +68,7 @@
 .hBoxCryptoPage {
     -fx-background-color: #004d8c;
     -fx-background-radius: 0 0 30 30;
-    -fx-pref-height: 240;
+    -fx-pref-height: 200;
     -fx-pref-width: 350;
 }
 

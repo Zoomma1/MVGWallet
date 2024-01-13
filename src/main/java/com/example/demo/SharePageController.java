@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
-public class TokenPageController extends Tile{
+public class SharePageController extends Tile{
     @FXML
     ChoiceBox choiceBox;
     @FXML
@@ -39,21 +39,22 @@ public class TokenPageController extends Tile{
     protected Parent root;
     protected Stage stage;
     protected Scene scene;
-    private static String coin;
+    private static String share;
     private static Double price;
     private String wantedCurrency;
     private double exchangeRate = 1;
     private String selectedTimeStamp;
-    CoinrankinAPITools coinrankinAPITools = new CoinrankinAPITools();
+    AlphaVantageAPITools alphaVantageAPITools = new AlphaVantageAPITools();
     CurrencyAPITools currencyConverterAPI = new CurrencyAPITools();
     Map<String, Object> dictionary;
-    private double BTCtoUSDConversionRate;
 
-    public TokenPageController() {
+//  todo: WARNING the alphavantage API sometimes return nothing to check is we have time, the rest still kinda works tho
+
+    public SharePageController() {
     }
 
     public static void setCoin(String symbol, Double coinPrice) {
-        coin = symbol;
+        share = symbol;
         price = coinPrice;
     }
 
@@ -61,15 +62,14 @@ public class TokenPageController extends Tile{
         priceLabel.setText(String.format("price: %.3f", price));
 
         dictionary = currencyConverterAPI.getConversionRate("USD");
-        BTCtoUSDConversionRate = coinrankinAPITools.convertFromBtcToUsdt();
 
         lineChart.setLegendVisible(false);
         lineChart.lookup(".chart-plot-background").setStyle("-fx-background-color: #A3A3A3; -fx-opacity: 0.1;");
         lineChart.setVerticalGridLinesVisible(false);
         lineChart.setHorizontalGridLinesVisible(false);
 
-        choiceBox.getItems().addAll("1y","30d","7d","24h","12h","1h");
-        choiceBox.setValue("12h");
+        choiceBox.getItems().addAll( "5min", "15min", "60min");
+        choiceBox.setValue("60min");
         selectedTimeStamp = choiceBox.getValue().toString();
         updateSparkLineOnTimeStampChange(selectedTimeStamp);
 
@@ -84,8 +84,7 @@ public class TokenPageController extends Tile{
             }
         });
 
-        Separator separator = new Separator();
-        priceChoiceBox.getItems().addAll("BTC",separator,"USD");
+        priceChoiceBox.getItems().addAll("USD");
         priceChoiceBox.setValue("USD");
 
         String[] availableCurrency = getAvailableCurrency();
@@ -95,15 +94,6 @@ public class TokenPageController extends Tile{
 
         priceChoiceBox.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) ->{
             if(newValue != null){
-                if(Objects.equals(newValue.toString(), "BTC")){
-                    wantedCurrency = newValue.toString();
-                    try {
-                        exchangeRate = BTCtoUSDConversionRate;
-                        updateSparkLineOnTimeStampChange(selectedTimeStamp);
-                    } catch (IOException | InterruptedException | ParseException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
                 if(Objects.equals(newValue.toString(), "USD")){
                     wantedCurrency = newValue.toString();
                     exchangeRate = 1.0;
@@ -127,7 +117,7 @@ public class TokenPageController extends Tile{
     }
 
     public void backButtonOnAction(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("CryptocurrencyPage.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("StockPage.fxml"));
         root = loader.load();
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
@@ -148,7 +138,7 @@ public class TokenPageController extends Tile{
     }
 
     private void updateSparkLineOnTimeStampChange(String timeStamp) throws IOException, InterruptedException, ParseException {
-        String[] sparkline = coinrankinAPITools.getCoinPriceHistory(coinrankinAPITools.getUUIDByToken(coin),timeStamp);
+        String[] sparkline = alphaVantageAPITools.getShareSparkline(share,timeStamp);
         xAxis.setTickLabelsVisible(false);
         yAxis.setTickLabelsVisible(false);
 

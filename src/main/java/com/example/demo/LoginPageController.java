@@ -40,6 +40,7 @@ public class LoginPageController {
 
     public void loginOnAction(ActionEvent event) throws IOException {
         if(username != null && password != null && !username.getText().isEmpty() && !password.getText().isEmpty()){
+//          todo: instead of using the csv here use the sql database
             if(csvLogin.isUserCorrect(username.getText(),password.getText())){
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("DashboardPage.fxml"));
                 root = loader.load();
@@ -69,6 +70,7 @@ public class LoginPageController {
 
     public void loginOnEnter(KeyEvent keyEvent) throws IOException {
         if(keyEvent.getCode() == ENTER){
+//          todo: Same thing here
             if(username != null && password != null && !username.getText().isEmpty() && !password.getText().isEmpty()){
                 if(csvLogin.isUserCorrect(username.getText(),password.getText())){
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("DashboardPage.fxml"));
