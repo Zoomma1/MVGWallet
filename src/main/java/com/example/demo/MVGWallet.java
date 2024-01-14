@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -27,13 +28,14 @@ import java.util.TreeMap;
 
 public class MVGWallet extends Application {
     @Override
-    public void start(Stage stage) throws IOException, InterruptedException, SQLException /*ParseException*/ {
+    public void start(Stage stage) throws IOException, InterruptedException, SQLException, NoSuchAlgorithmException /*ParseException*/ {
         UserSQL user = new UserSQL();
         ArrayList<String> select = new ArrayList<>();
-        select.add("*");
+        select.add("identifiant");
         Date date = new Date();
-        user.insert(2,"gigabg","123456","salt","mail@", new Timestamp(date.getTime()),false);
-        System.out.println(user.selectWhere(select,"User","password","123456"));
+        Timestamp ts=new Timestamp(date.getTime());
+
+        user.checkKnowUser("mathys","123456");
        /* FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginPage.fxml"));
         Parent root = loader.load();
         LoginPageController loginPageController = loader.getController();
