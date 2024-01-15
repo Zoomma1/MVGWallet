@@ -1,0 +1,33 @@
+.check-box .box {
+    -fx-background-color: white;
+    -fx-border-color: #323232;
+}
+.check-box:selected .mark {
+    -fx-background-color: black;
+}
+.check-box:selected .box {
+    -fx-background-color: white;
+}
+
+.LoginAndRegister {
+    -fx-background-image: url("MVGWalletLogginFrame.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
+
+.Application {
+    -fx-background-image: url("MVGWalletDashboardFrame.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
+
+.borderPane {
+     -fx-background-color: transparent;
+ }
+
+.navBarStyle {
+    -fx-background-color: linear-gradient(to bottom, #0984B1, transparent);
+    -fx-margin : 50% 0 100% 0;
+}
