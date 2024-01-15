@@ -19,7 +19,11 @@ public abstract class NavBarController {
     protected Stage stage;
     protected Scene scene;
 
-    public void switchPage(ActionEvent event, String pageFXML) throws IOException {
+    public NavBarController() {
+    }
+
+    public void switchPage(ActionEvent event, String pageFXML) throws IOException, InterruptedException {
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource(pageFXML));
         root = loader.load();
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -40,4 +44,6 @@ public abstract class NavBarController {
         stage.show();
     }
 
+    public void initialize() throws InterruptedException, IOException {
+    }
 }

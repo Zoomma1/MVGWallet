@@ -8,6 +8,7 @@ import java.security.MessageDigest;
 import java.util.Scanner;
 
 public class CSVLogin {
+//  todo : replace this with the sql database
     private String filePath = "src/main/resources/com/example/demo/LoginDatas.csv";
 
     public CSVLogin() {

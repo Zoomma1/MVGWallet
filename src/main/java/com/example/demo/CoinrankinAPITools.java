@@ -24,24 +24,20 @@ import org.json.simple.parser.ParseException;
 
 public class CoinrankinAPITools {
 
-    public void getCoinPrice() throws IOException, InterruptedException {
-        String  jsonString = getFiftyBestCoins();
-        System.out.println(jsonString);
-        JSONParser parser = new JSONParser();
+    JSONParser jsonParser = new JSONParser();
 
-        try {
-            JSONObject json = (JSONObject) parser.parse(jsonString);
-            JSONArray coinsArray = (JSONArray) ((JSONObject) json.get("data")).get("coins");
-            TreeMap<String,Double> coinPrice = new TreeMap<>();
-            for (int i = 0; i < coinsArray.size(); i++) {
-                double price = Double.parseDouble(((JSONObject) coinsArray.get(i)).get("price").toString());
-                String coin = ((JSONObject) coinsArray.get(i)).get("symbol").toString();
-                coinPrice.put(coin,price);
-            }
-            System.out.println(coinPrice);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    public Double getCoinPrice(String uuid) throws IOException, InterruptedException, ParseException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://coinranking1.p.rapidapi.com/coin/"+ uuid + "?referenceCurrencyUuid=yhjMzLPhuIDl&timePeriod=24h"))
+                .header("X-RapidAPI-Key", "11b63e8be8msh319854639b88765p157ae7jsn499f64df1c02")
+                .header("X-RapidAPI-Host", "coinranking1.p.rapidapi.com")
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+        JSONObject jsonString = (JSONObject) jsonParser.parse(response.body());
+        Double coinPrice = (Double) ((JSONObject) jsonString.get("data")).get("price");
+        return coinPrice;
     }
 
     public String getFiftyBestCoins() throws IOException, InterruptedException {
@@ -56,22 +52,49 @@ public class CoinrankinAPITools {
         return response.body();
     }
 
-    public String getCoinPriceHistory(String uuid, String timeperiod) throws IOException, InterruptedException {
+    public String[] getCoinPriceHistory(String uuid, String timeperiod) throws IOException, InterruptedException, ParseException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://coinranking1.p.rapidapi.com/coin/Qwsogvtv82FCd/history?referenceCurrencyUuid=" + uuid + "&timePeriod=" + timeperiod))
+                .uri(URI.create("https://coinranking1.p.rapidapi.com/coin/" + uuid + "?referenceCurrencyUuid=yhjMzLPhuIDl&timePeriod=" + timeperiod))
                 .header("X-RapidAPI-Key", "11b63e8be8msh319854639b88765p157ae7jsn499f64df1c02")
                 .header("X-RapidAPI-Host", "coinranking1.p.rapidapi.com")
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        return response.body();
+
+        String jsonString = response.body();
+
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonString);
+        JSONObject coinData = (JSONObject) jsonObject.get("data");
+        JSONObject coin = (JSONObject) coinData.get("coin");
+        JSONArray sparklineArray = (JSONArray) coin.get("sparkline");
+
+        if (sparklineArray != null) {
+            int size = sparklineArray.size();
+            String[] sparkline = new String[size - 1];
+
+            for (int i = 0; i < size - 1; i++) {
+                Object value = sparklineArray.get(i);
+                sparkline[i] = value.toString();
+            }
+
+            return sparkline;
+        } else {
+            return new String[0];
+        }
     }
 
-    public String getUUIDByToken(String token, String jsonString) throws IOException, InterruptedException {
-        JSONParser parser = new JSONParser();
+    public String getUUIDByToken(String token) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://coinranking1.p.rapidapi.com/coins?referenceCurrencyUuid=yhjMzLPhuIDl&timePeriod=24h&tiers%5B0%5D=1&orderBy=marketCap&orderDirection=desc&limit=50&offset=0"))
+                .header("X-RapidAPI-Key", "11b63e8be8msh319854639b88765p157ae7jsn499f64df1c02")
+                .header("X-RapidAPI-Host", "coinranking1.p.rapidapi.com")
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        String jsonString = response.body();
 
         try {
-            JSONObject json = (JSONObject) parser.parse(jsonString);
+            JSONObject json = (JSONObject) jsonParser.parse(jsonString);
             JSONArray coinsArray = (JSONArray) ((JSONObject) json.get("data")).get("coins");
 
             for (int i = 0; i < coinsArray.size(); i++) {
@@ -84,12 +107,48 @@ public class CoinrankinAPITools {
             e.printStackTrace();
         }
 
-        return null; // Return null if the token is not found
-    }
-    public double convertUSDToEUR(Double price) throws IOException, InterruptedException {
-        RealTimeFinanceDataAPITools realTimeFinanceDataAPITools = new RealTimeFinanceDataAPITools();
-        Double conversionRate = realTimeFinanceDataAPITools.getUSDToEURExchangeRate();
-        return price*conversionRate;
+        return null;
     }
 
+    public double convertFromBtcToUsdt() throws IOException, InterruptedException, ParseException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://coinranking1.p.rapidapi.com/coin/Qwsogvtv82FCd/price?referenceCurrencyUuid=yhjMzLPhuIDl"))
+                .header("X-RapidAPI-Key", "11b63e8be8msh319854639b88765p157ae7jsn499f64df1c02")
+                .header("X-RapidAPI-Host", "coinranking1.p.rapidapi.com")
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(response.body());
+        JSONObject jsonData = (JSONObject) ((JSONObject) jsonObject.get("data"));
+        Object BTCPrice = jsonData.get("price");
+        return 1 / Double.parseDouble(BTCPrice.toString());
+    }
+
+    public String getFiftyBestCoins1Month() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://coinranking1.p.rapidapi.com/coins?referenceCurrencyUuid=yhjMzLPhuIDl&timePeriod=30d&tiers%5B0%5D=1&orderBy=marketCap&orderDirection=desc&limit=50&offset=0"))
+                .header("X-RapidAPI-Key", "11b63e8be8msh319854639b88765p157ae7jsn499f64df1c02")
+                .header("X-RapidAPI-Host", "coinranking1.p.rapidapi.com")
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
+
+    public String[] getFiveBestAndFiveWorstCoinsLastMonth() throws ParseException, IOException, InterruptedException {
+        String[] fiveBestAndFiveWorst = new String[6];
+
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(getFiftyBestCoins1Month());
+        JSONObject jsonData = (JSONObject) jsonObject.get("data");
+        JSONArray jsonCoins = (JSONArray) jsonData.get("coins");
+
+        for (int i = 0; i < 3; i++) {
+            fiveBestAndFiveWorst[i] = jsonCoins.get(i).toString();
+        }
+        for (int i = 0; i < 3; i++) {
+            fiveBestAndFiveWorst[3+i] = jsonCoins.get(jsonCoins.size() - 1 - i).toString();
+        }
+
+        return fiveBestAndFiveWorst;
+    }
 }

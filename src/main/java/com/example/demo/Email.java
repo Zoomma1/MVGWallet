@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Email {
+//  todo: replace this with the other one that's way better tho
     String email;
 
     public Email(String email) {

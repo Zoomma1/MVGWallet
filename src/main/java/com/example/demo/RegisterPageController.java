@@ -36,6 +36,7 @@ public class RegisterPageController {
     private CSVLogin csvLogin = new CSVLogin();
 
     public void registerOnAction(ActionEvent event) throws IOException {
+//      todo: sql database for register
         if(!username.getText().equals("") && !email.getText().equals("") && !password.getText().equals("") && password.getText().equals(password1.getText()) && Email.isEmailValid(email.getText())){
             csvLogin.setNewUserData(username.getText() + "," + email.getText() + "," + csvLogin.encryptPassword(password.getText()));
             FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginPage.fxml"));
