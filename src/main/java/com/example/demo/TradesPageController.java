@@ -168,7 +168,6 @@ public class TradesPageController extends NavBarController{
                 }
             }
         });
-
     }
 
     public void dashboardOnAction(ActionEvent event) throws IOException, InterruptedException {

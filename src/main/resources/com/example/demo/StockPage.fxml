@@ -82,7 +82,14 @@
     <center>
         <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" styleClass="scrollPane" stylesheets="@style.css" BorderPane.alignment="CENTER">
             <content>
-                <TilePane fx:id="tilePane" prefColumns="4" />
+                <TilePane fx:id="tilePane" prefColumns="4">
+               <children>
+                  <Button onAction="#buttonOnAction" alignment="CENTER" mnemonicParsing="false" styleClass="vBoxCryptoPage" stylesheets="@style.css" text="+" textFill="WHITE">
+                     <font>
+                        <Font name="Dyuthi Regular" size="96.0" />
+                     </font>
+                  </Button>
+               </children></TilePane>
             </content>
         </ScrollPane>
     </center>

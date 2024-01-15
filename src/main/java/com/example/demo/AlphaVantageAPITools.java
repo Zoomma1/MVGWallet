@@ -11,6 +11,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class AlphaVantageAPITools {
+    JSONParser jsonParser = new JSONParser();
     public String getTIME_SERIES_INTRADAY(String symbol, String interval) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://alpha-vantage.p.rapidapi.com/query?interval=" + interval + "&function=TIME_SERIES_INTRADAY&symbol=" + symbol + "&datatype=json&output_size=compact"))
@@ -24,7 +25,6 @@ public class AlphaVantageAPITools {
     public String[] getShareSparkline(String symbol, String interval) throws IOException, InterruptedException, ParseException {
         String jsonData = getTIME_SERIES_INTRADAY(symbol,interval);
 
-        JSONParser jsonParser = new JSONParser();
         JSONObject json = (JSONObject) jsonParser.parse(jsonData);
 
         JSONObject timeSeries = (JSONObject) json.get("Time Series (" + interval + ")");
@@ -38,5 +38,12 @@ public class AlphaVantageAPITools {
             openPrices[i++] = openPrice;
         }
         return openPrices;
+    }
+
+    public boolean isValidSymbol(String symbol) throws IOException, InterruptedException, ParseException {
+        String response = getTIME_SERIES_INTRADAY(symbol,"5min");
+        JSONObject jsonString = (JSONObject) jsonParser.parse(response);
+
+        return !jsonString.containsKey("Error Message");
     }
 }
