@@ -4,6 +4,9 @@ import Entity.Email.EmailUtility;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+
 /**
 * Create User object if Login is true
 *
@@ -15,17 +18,17 @@ import java.io.IOException;
 *
 * Mathys Haubert
 **/
-public class User extends UserSQL{
+public class User extends UserRepository{
     protected String userName;
-
     protected String email;
+    protected String password;
 
     public User(
             String userName,
-            String email
+            String password
     ){
         this.userName = userName;
-        this.email = email;
+        this.password = password;
     }
 
     public String getUserName() {
@@ -56,5 +59,9 @@ public class User extends UserSQL{
                 "Si c'était vous, aucune action de votre pas n'est requise. Dans le cas contraire, nous vous invitons à contacter un administrateur. \\n\\n" +
                 "L'équipe MVG Wallet.",this.userName);
         EmailUtility.sendEmail(this.email, subject,content);
+    }
+
+    public int getId() throws NoSuchAlgorithmException, SQLException {
+        return new UserRepository().findIdByPassword(hashingWord(this.password));
     }
 }

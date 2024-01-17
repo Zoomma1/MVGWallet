@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.regex.*;
 
-public class UserSQL {
+public class WalletRepository {
     private Connection conn;
     private Statement stmt;
     public void closeConnection() throws SQLException {
@@ -16,7 +16,7 @@ public class UserSQL {
             System.out.println(e);
         }
     }
-    public UserSQL() {
+    public WalletRepository() {
         try {
             this.conn = DriverManager.getConnection(
                     "jdbc:mysql://176.147.224.139:3306/MVGWallet_DBB", "MVGWallet", "wGtv[Db&Wymu*ht!YmKTxwFz5T;?vQ");
@@ -26,7 +26,7 @@ public class UserSQL {
         }
     }
 
-    public String checkRegex(String text, String regex){
+    private String checkRegex(String text, String regex){
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(text);
         if (matcher.find()) {
@@ -36,15 +36,15 @@ public class UserSQL {
         }
     }
 
-    /** @return a String of the builder */
-    public String selectWhere(ArrayList<String> columns, String tables, String columnCondition, String columnResult) throws SQLException {
+    private ArrayList<String> selectWhere(ArrayList<String> columns, String tables, String columnCondition, String columnResult) throws SQLException {
         String queryTable = String.join(",", columns);
         String sql = String.format("SELECT %s FROM %s WHERE %s = '%s';", queryTable, tables, columnCondition, columnResult);
         ResultSet res = stmt.executeQuery(sql);
         ResultSetMetaData metaData = res.getMetaData();
         int columnCount = metaData.getColumnCount();
-        StringBuilder resultBuilder = new StringBuilder();
+        ArrayList<String> results = new ArrayList<>();
         while (res.next()) {
+            StringBuilder resultBuilder = new StringBuilder();
             for (int i = 1; i <= columnCount; i++) {
                 String columnName = metaData.getColumnName(i);
                 int type = metaData.getColumnType(i);
@@ -57,23 +57,23 @@ public class UserSQL {
                         String stringValue = res.getString(i);
                         resultBuilder.append(columnName).append(": ").append(stringValue);
                         break;
-                    // Vous pouvez ajouter plus de types ici
+                    // Ajouter plus de types ici si nécessaire
                     default:
                         Object objValue = res.getObject(i);
-                        System.out.print(columnName + ": " + objValue);
                         resultBuilder.append(columnName).append(": ").append(objValue);
                         break;
                 }
                 if (i < columnCount) {
                     resultBuilder.append(", ");
                 }
-                resultBuilder.append("\n");
             }
+            results.add(resultBuilder.toString());
         }
-        return resultBuilder.toString();
+        return results;
     }
 
-    public String select(ArrayList<String> columns, String tables) throws SQLException {
+
+    private String select(ArrayList<String> columns, String tables) throws SQLException {
         String queryTable = String.join(",", columns);
         String sql = String.format("SELECT %s FROM %s;", queryTable, tables);
         ResultSet res = stmt.executeQuery(sql);
@@ -108,7 +108,7 @@ public class UserSQL {
         return resultBuilder.toString();
     }
 
-    public UserSQL insertToUser(String first_name, String password, String salt, String email, Timestamp lastConnection, boolean stayConnected) throws SQLException {
+    private void insertToUser(String first_name, String password, String salt, String email, Timestamp lastConnection, boolean stayConnected) throws SQLException {
         String sql = "INSERT INTO users (first_name, password, salt, email, last_connection, stay_connected) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -123,11 +123,10 @@ public class UserSQL {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return this;
     }
 
     /* Si quantity === 0 alors l'utilisateur suit simplement le stocks */
-    public UserSQL insertToStocks(double quantity, String name, int id_wallet) throws SQLException {
+    private WalletRepository insertToStocks(double quantity, String name, int id_wallet) throws SQLException {
         String sql = "INSERT INTO stocks (quantity,name,id_wallet) VALUES (?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -155,7 +154,7 @@ public class UserSQL {
         return this;
     }
 
-    public UserSQL insertToWallet(int id_user, boolean selected) throws SQLException {
+    private WalletRepository insertToWallet(int id_user, boolean selected) throws SQLException {
         String sql = "INSERT INTO wallet (user_id, selected) VALUES (?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -181,7 +180,7 @@ public class UserSQL {
         return this;
     }
 
-    public UserSQL insertToCrypto(double quantity, String name, int id_wallet) throws SQLException
+    private WalletRepository insertToCrypto(double quantity, String name, int id_wallet) throws SQLException
     {
         String sql = "INSERT INTO crypto (quantity,name,id_wallet) VALUES (?, ?, ?)";
 
@@ -226,12 +225,12 @@ public class UserSQL {
     }
 
     /**@return true if the user is knowed */
-    public boolean checkKnowUser(String user, String password){
+    private boolean checkKnowUser(String user, String password){
         ArrayList<String> id = new ArrayList<>();
         id.add("id");
         try{
-            String idPassword = this.selectWhere(id,"users","password",password);
-            String idUser = this.selectWhere(id,"users","first_name",user);
+            String idPassword = String.valueOf(this.selectWhere(id,"users","password",password));
+            String idUser = String.valueOf(this.selectWhere(id,"users","first_name",user));
             if (idPassword.equals(idUser)) {
                 return true;
             }
@@ -239,5 +238,19 @@ public class UserSQL {
             throw new RuntimeException(e);
         }
         return false;
+    }
+
+    public ArrayList<String> findById(int id) throws SQLException {
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add(String.format("%d",id));
+        return selectWhere(columns,"wallet","id",String.format("%d",id));
+    }
+    public ArrayList<String> findByUserId(int userId) throws SQLException {
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add(String.format("%d",userId));
+        return selectWhere(columns,"wallet","user_id",String.format("%d",userId));
+    }
+    public void createWallet(int user_id, boolean selected) throws SQLException {
+        insertToWallet(user_id,selected);
     }
 }

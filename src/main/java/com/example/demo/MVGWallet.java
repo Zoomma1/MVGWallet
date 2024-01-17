@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import Entity.User;
+import Entity.WalletRepository;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 
 
 /*************************************************************************************
@@ -17,8 +21,8 @@ import java.io.IOException;
 
 public class MVGWallet extends Application {
     @Override
-    public void start(Stage stage) throws IOException, ParseException, InterruptedException {
-       FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginPage.fxml"));
+    public void start(Stage stage) throws IOException, ParseException, InterruptedException, SQLException, NoSuchAlgorithmException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginPage.fxml"));
         Parent root = loader.load();
         LoginPageController loginPageController = loader.getController();
         Scene scene = new Scene(root);

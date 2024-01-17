@@ -1,7 +1,7 @@
 package com.example.demo;
 
 import Entity.User;
-import Entity.UserSQL;
+import Entity.UserRepository;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-import static Entity.UserSQL.hashingWord;
+import static Entity.UserRepository.hashingWord;
 
 /*************************************************************************************
  *This is the RegisterPageController class it is used to control the                 *
@@ -41,7 +41,7 @@ public class RegisterPageController {
     private Scene scene;
     private Parent root;
     private User utilisateur = LoginPageController.utilisateur;
-    private UserSQL sql = new UserSQL();
+    private UserRepository sql = new UserRepository();
 
     public void registerOnAction(ActionEvent event) throws IOException, NoSuchAlgorithmException, SQLException {
 //      todo: sql database for register
