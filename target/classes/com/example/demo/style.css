@@ -21,6 +21,8 @@
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover;
     -fx-background-position: center;
+    -fx-pref-height: 1080;
+    -fx-pref-width: 1920;
 }
 
 .borderPane {
@@ -29,5 +31,106 @@
 
 .navBarStyle {
     -fx-background-color: linear-gradient(to bottom, #0984B1, transparent);
-    -fx-margin : 50% 0 100% 0;
+}
+
+.vBoxWalletDashboard{
+    -fx-background-color: #010831;
+    -fx-background-radius: 25;
+    -fx-alignment: TOP_CENTER;
+    -fx-pref-width: 740;
+    -fx-pref-height: 400;
+}
+
+.vBoxWalletDashboardSelected{
+    -fx-background-color: #010831;
+    -fx-background-radius: 25;
+    -fx-border-color: #4990B8;
+    -fx-border-radius: 20;
+    -fx-border-width: 5;
+    -fx-alignment: TOP_CENTER;
+    -fx-pref-width: 700;
+    -fx-pref-height: 400;
+}
+
+.scrollPane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.vBoxCryptoPage {
+    -fx-background-color: #010831;
+    -fx-background-radius: 30;
+    -fx-pref-height: 350;
+    -fx-pref-width: 350;
+}
+
+.hBoxCryptoPage {
+    -fx-background-color: #004d8c;
+    -fx-background-radius: 0 0 30 30;
+    -fx-pref-height: 200;
+    -fx-pref-width: 350;
+}
+
+.lineChartPreview {
+    -fx-background-color: transparent;
+}
+
+.lineChartPreview-content {
+    -fx-background-color: transparent;
+}
+
+.lineChartPreview-legend {
+    -fx-background-color: transparent;
+}
+
+.axisPreview{
+    -fx-background-color: transparent;
+}
+
+.webView {
+    -fx-background-color: transparent;
+    -fx-pref-width: 50;
+    -fx-pref-height: 50;
+}
+
+.titled-pane {
+    -fx-background-color: transparent;
+    -fx-background-radius: 20;
+}
+
+.titled-pane .title {
+    -fx-background-color: #2980b9;
+    -fx-background-radius: 10 10 0 0;
+}
+
+.titled-pane .content{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-background-color: transparent;
+}
+
+.vBoxNewsTile{
+    -fx-background-color: #07148a;
+    -fx-background-radius: 20;
+}
+
+.scrollPaneOverview{
+    -fx-background:  #010831;
+    -fx-background-color:  #010831;
+    -fx-border-color:  #010831;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+}
+
+.hBoxOverview{
+    -fx-pref-height: 133;
+    -fx-pref-width: 650;
+    -fx-max-height: 133;
+    -fx-max-width: 650;
+    -fx-background-color: transparent;
+    -fx-alignment: CENTER;
 }

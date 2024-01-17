@@ -57,6 +57,7 @@ public class TradesPageController extends NavBarController{
 
     CoinrankinAPITools coinrankinAPITools = new CoinrankinAPITools();
     AlphaVantageAPITools alphaVantageAPITools = new AlphaVantageAPITools();
+    private boolean isUserChange = true;
 //todo: /!\ Check all todos
 //todo: add a warning in case user doesnt have enough to buy or sell
     @Override
@@ -64,26 +65,31 @@ public class TradesPageController extends NavBarController{
 //        todo: get user wallet tokens and shares
         tokenBuyChoiceBox.getItems().addAll("BTC"); //todo: add all tokens here
         tokenSellChoiceBox.getItems().addAll("BTC"); //todo: add all tokens here
-        shareBuyChoiceBox.getItems().addAll(""); //todo: add all shares here
-        shareSellChoiceBox.getItems().addAll(""); //todo: add all shares here
+        shareBuyChoiceBox.getItems().addAll("MSFT","AAPL"); //todo: add all shares here
+        shareSellChoiceBox.getItems().addAll("MSFT","AAPL"); //todo: add all shares here
+
         tokenBuyChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue!=null){
                 try {
-                    double coinPrice = coinrankinAPITools.getCoinPrice((String) newValue); //todo: here we should get the token uuid instead of tne newValue
+                    double coinPrice = coinrankinAPITools.getCoinPrice("Qwsogvtv82FCd"); //todo: here we should get the token uuid instead of tne newValue
                     double conversionRate = 1/coinPrice;
 
                     tokenBuyLabel.setText(newValue.toString());
                     tokenBuyPriceLabel.setText(String.valueOf(coinPrice));
 
                     tokenTotalBuyTextField.textProperty().addListener((observable1, oldValue1, newValue1) -> {
-                        if(newValue1 != null){
-                            tokenQuantityBuyTextField.setText(String.valueOf(coinPrice / Double.parseDouble(newValue1)));
+                        if(newValue1 != null && isUserChange){
+                            isUserChange = false;
+                            tokenQuantityBuyTextField.setText(String.valueOf(conversionRate * Double.parseDouble(newValue1)));
+                            isUserChange = true;
                         }
                     });
 
                     tokenQuantityBuyTextField.textProperty().addListener((observable2, oldValue2, newValue2) ->{
-                        if(newValue2 != null){
-                            tokenTotalBuyTextField.setText(String.valueOf(conversionRate * Double.parseDouble(newValue2)));
+                        if(newValue2 != null && isUserChange){
+                            isUserChange = false;
+                            tokenTotalBuyTextField.setText(String.valueOf(coinPrice / Double.parseDouble(newValue2)));
+                            isUserChange = true;
                         }
                     });
                 } catch (IOException | InterruptedException | ParseException e) {
@@ -91,24 +97,29 @@ public class TradesPageController extends NavBarController{
                 }
             }
         });
+
         tokenSellChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue!=null){
                 try {
-                    double coinPrice = coinrankinAPITools.getCoinPrice((String) newValue); //todo: here we should get the token uuid instead of tne newValue
+                    double coinPrice = coinrankinAPITools.getCoinPrice("Qwsogvtv82FCd"); //todo: here we should get the token uuid instead of tne newValue
                     double conversionRate = 1/coinPrice;
 
                     tokenSellLabel.setText(newValue.toString());
                     tokenSellPriceLabel.setText(String.valueOf(coinPrice));
 
                     tokenTotalSellTextField.textProperty().addListener((observable1, oldValue1, newValue1) -> {
-                        if(newValue1 != null){
-                            tokenQuantitySellTextField.setText(String.valueOf(coinPrice / Double.parseDouble(newValue1)));
+                        if(newValue1 != null && isUserChange){
+                            isUserChange = false;
+                            tokenQuantitySellTextField.setText(String.valueOf(conversionRate * Double.parseDouble(newValue1)));
+                            isUserChange = true;
                         }
                     });
 
                     tokenQuantitySellTextField.textProperty().addListener((observable2, oldValue2, newValue2) ->{
-                        if(newValue2 != null){
-                            tokenTotalSellTextField.setText(String.valueOf(conversionRate * Double.parseDouble(newValue2)));
+                        if(newValue2 != null && isUserChange){
+                            isUserChange = false;
+                            tokenTotalSellTextField.setText(String.valueOf(coinPrice / Double.parseDouble(newValue2)));
+                            isUserChange = true;
                         }
                     });
                 } catch (IOException | InterruptedException | ParseException e) {
@@ -116,10 +127,10 @@ public class TradesPageController extends NavBarController{
                 }
             }
         });
-        tokenSellChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        shareBuyChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue!=null){
                 try {
-                    String[] sparkline = alphaVantageAPITools.getShareSparkline((String) newValue, "5min");
+                    String[] sparkline = alphaVantageAPITools.getShareSparkline(newValue.toString(), "5min");
                     double sharePrice = Double.parseDouble(sparkline[sparkline.length - 1]);
                     double conversionRate = 1/sharePrice;
 
@@ -127,14 +138,18 @@ public class TradesPageController extends NavBarController{
                     shareBuyPriceLabel.setText(String.valueOf(sharePrice));
 
                     shareTotalBuyTextField.textProperty().addListener((observable1, oldValue1, newValue1) -> {
-                        if(newValue1 != null){
+                        if(newValue1 != null && isUserChange){
+                            isUserChange = false;
                             shareQuantityBuyTextField.setText(String.valueOf(sharePrice / Double.parseDouble(newValue1)));
+                            isUserChange = true;
                         }
                     });
 
                     shareQuantityBuyTextField.textProperty().addListener((observable2, oldValue2, newValue2) ->{
-                        if(newValue2 != null){
+                        if(newValue2 != null && isUserChange){
+                            isUserChange = false;
                             shareTotalBuyTextField.setText(String.valueOf(conversionRate * Double.parseDouble(newValue2)));
+                            isUserChange = true;
                         }
                     });
                 } catch (IOException | InterruptedException | ParseException e) {
@@ -142,10 +157,10 @@ public class TradesPageController extends NavBarController{
                 }
             }
         });
-        tokenSellChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        shareSellChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue!=null){
                 try {
-                    String[] sparkline = alphaVantageAPITools.getShareSparkline((String) newValue, "5min");
+                    String[] sparkline = alphaVantageAPITools.getShareSparkline(newValue.toString(), "5min");
                     double sharePrice = Double.parseDouble(sparkline[sparkline.length - 1]);
                     double conversionRate = 1/sharePrice;
 
@@ -153,14 +168,18 @@ public class TradesPageController extends NavBarController{
                     shareSellLabel.setText(String.valueOf(sharePrice));
 
                     shareTotalSellTextField.textProperty().addListener((observable1, oldValue1, newValue1) -> {
-                        if(newValue1 != null){
+                        if(newValue1 != null && isUserChange){
+                            isUserChange = false;
                             shareQuantitySellTextField.setText(String.valueOf(sharePrice / Double.parseDouble(newValue1)));
+                            isUserChange = true;
                         }
                     });
 
                     shareQuantitySellTextField.textProperty().addListener((observable2, oldValue2, newValue2) ->{
                         if(newValue2 != null){
+                            isUserChange = false;
                             shareTotalSellTextField.setText(String.valueOf(conversionRate * Double.parseDouble(newValue2)));
+                            isUserChange = true;
                         }
                     });
                 } catch (IOException | InterruptedException | ParseException e) {

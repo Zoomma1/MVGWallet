@@ -48,8 +48,6 @@ public class SharePageController extends Tile{
     CurrencyAPITools currencyConverterAPI = new CurrencyAPITools();
     Map<String, Object> dictionary;
 
-//  todo: WARNING the alphavantage API sometimes return nothing to check is we have time, the rest still kinda works tho
-
     public SharePageController() {
     }
 
