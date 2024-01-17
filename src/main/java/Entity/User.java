@@ -20,16 +20,12 @@ public class User extends UserSQL{
 
     protected String email;
 
-    protected int age;
-
     public User(
             String userName,
-            String email,
-            int age
+            String email
     ){
         this.userName = userName;
         this.email = email;
-        this.age = age;
     }
 
     public String getUserName() {
@@ -38,10 +34,6 @@ public class User extends UserSQL{
 
     public String getEmail() {
         return email;
-    }
-
-    public int getAge() {
-        return age;
     }
 
     public void setPassword(String newPassword){

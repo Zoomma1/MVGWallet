@@ -19,14 +19,14 @@ public class UserSQL {
     public UserSQL() {
         try {
             this.conn = DriverManager.getConnection(
-                    "jdbc:mysql://192.168.1.65:3306/MVGWallet_DBB", "MVGWallet", "wGtv[Db&Wymu*ht!YmKTxwFz5T;?vQ");
+                    "jdbc:mysql://176.147.224.139:3306/MVGWallet_DBB", "MVGWallet", "wGtv[Db&Wymu*ht!YmKTxwFz5T;?vQ");
             this.stmt = this.conn.createStatement();
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    private String checkRegex(String text, String regex){
+    public String checkRegex(String text, String regex){
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(text);
         if (matcher.find()) {
@@ -37,7 +37,7 @@ public class UserSQL {
     }
 
     /** @return a String of the builder */
-    private String selectWhere(ArrayList<String> columns, String tables, String columnCondition, String columnResult) throws SQLException {
+    public String selectWhere(ArrayList<String> columns, String tables, String columnCondition, String columnResult) throws SQLException {
         String queryTable = String.join(",", columns);
         String sql = String.format("SELECT %s FROM %s WHERE %s = '%s';", queryTable, tables, columnCondition, columnResult);
         ResultSet res = stmt.executeQuery(sql);
@@ -72,7 +72,8 @@ public class UserSQL {
         }
         return resultBuilder.toString();
     }
-    private String select(ArrayList<String> columns, String tables) throws SQLException {
+
+    public String select(ArrayList<String> columns, String tables) throws SQLException {
         String queryTable = String.join(",", columns);
         String sql = String.format("SELECT %s FROM %s;", queryTable, tables);
         ResultSet res = stmt.executeQuery(sql);
@@ -107,7 +108,7 @@ public class UserSQL {
         return resultBuilder.toString();
     }
 
-    private UserSQL insertToUser(String first_name, String password, String salt, String email, Timestamp lastConnection, boolean stayConnected) throws SQLException {
+    public UserSQL insertToUser(String first_name, String password, String salt, String email, Timestamp lastConnection, boolean stayConnected) throws SQLException {
         String sql = "INSERT INTO users (first_name, password, salt, email, last_connection, stay_connected) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -126,7 +127,7 @@ public class UserSQL {
     }
 
     /* Si quantity === 0 alors l'utilisateur suit simplement le stocks */
-    private UserSQL insertToStocks(double quantity, String name, int id_wallet) throws SQLException {
+    public UserSQL insertToStocks(double quantity, String name, int id_wallet) throws SQLException {
         String sql = "INSERT INTO stocks (quantity,name,id_wallet) VALUES (?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -153,7 +154,8 @@ public class UserSQL {
         }
         return this;
     }
-    private UserSQL insertToWallet(int id_user, boolean selected) throws SQLException {
+
+    public UserSQL insertToWallet(int id_user, boolean selected) throws SQLException {
         String sql = "INSERT INTO wallet (user_id, selected) VALUES (?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -178,7 +180,8 @@ public class UserSQL {
         }
         return this;
     }
-    private UserSQL insertToCrypto(double quantity, String name, int id_wallet) throws SQLException
+
+    public UserSQL insertToCrypto(double quantity, String name, int id_wallet) throws SQLException
     {
         String sql = "INSERT INTO crypto (quantity,name,id_wallet) VALUES (?, ?, ?)";
 
@@ -206,7 +209,8 @@ public class UserSQL {
         }
         return this;
     }
-    public String hashingWord(String text) throws NoSuchAlgorithmException {
+
+    public static String hashingWord(String text) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hashByte = digest.digest(text.getBytes(StandardCharsets.UTF_8));
         // Convertissez les octets du hachage en une représentation hexadécimale
@@ -221,19 +225,19 @@ public class UserSQL {
         return hexString.toString();
     }
 
-    /**@return The id of the user */
-    public String checkKnowUser(String user, String password){
+    /**@return true if the user is knowed */
+    public boolean checkKnowUser(String user, String password){
         ArrayList<String> id = new ArrayList<>();
         id.add("id");
         try{
             String idPassword = this.selectWhere(id,"users","password",password);
             String idUser = this.selectWhere(id,"users","first_name",user);
             if (idPassword.equals(idUser)) {
-                return this.checkRegex(idUser,"\\d{1,9}");
+                return true;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
+        return false;
     }
 }

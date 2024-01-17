@@ -4,15 +4,16 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" styleClass="Application" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.OverviewPageController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="Application" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.OverviewPageController">
     <stylesheets>
         <URL value="@style.css" />
     </stylesheets>
@@ -75,10 +76,54 @@
             </children>
         </VBox>
     </left>
-    <center>
-        <TilePane prefHeight="1080.0" prefWidth="1461.0" BorderPane.alignment="CENTER">
-            <BorderPane.margin>
-                <Insets />
-            </BorderPane.margin></TilePane>
-    </center>
+   <center>
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="1525.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="1080.0" prefWidth="668.0" spacing="60.0">
+               <children>
+                  <TitledPane fx:id="tiltedPaneBest" alignment="CENTER" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="548.0" style="-fx-background-color: transparent" stylesheets="@style.css" text="Best of the month !" textAlignment="CENTER" textFill="WHITE">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <content>
+                        <VBox fx:id="vBoxBest" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="668.0" style="-fx-background-color: #010831; -fx-background-radius: 0 0 20 20;" />
+                     </content>
+                     <font>
+                        <Font name="Liberation Mono" size="23.0" />
+                     </font>
+                  </TitledPane>
+                  <TitledPane fx:id="tiltedPaneWorst" alignment="CENTER" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="548.0" stylesheets="@style.css" text="Worst of the month !" textAlignment="CENTER" textFill="WHITE">
+                     <content>
+                        <VBox fx:id="vBoxWorst" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="668.0" style="-fx-background-color: #010831; -fx-background-radius: 0 0 20 20;" />
+                     </content>
+                     <font>
+                        <Font name="Liberation Mono" size="23.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </TitledPane>
+               </children>
+               <padding>
+                  <Insets left="60.0" right="60.0" top="60.0" />
+               </padding>
+            </VBox>
+            <TitledPane alignment="CENTER" animated="false" collapsible="false" style="-fx-background-radius: 20; -fx-border-radius: 20;" text="News of the day !" textAlignment="CENTER" textFill="WHITE">
+               <content>
+                  <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" style="-fx-background-radius: 20; -fx-border-radius: 20;" styleClass="scrollPaneOverview" stylesheets="@style.css">
+                     <content>
+                        <VBox fx:id="vBoxScrollPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="910.0" prefWidth="755.0" style="-fx-background-radius: 20; -fx-border-radius: 20;" />
+                     </content>
+                  </ScrollPane>
+               </content>
+               <font>
+                  <Font name="Liberation Sans" size="23.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="60.0" left="30.0" top="60.0" />
+               </HBox.margin>
+            </TitledPane>
+         </children>
+      </HBox>
+   </center>
 </BorderPane>
