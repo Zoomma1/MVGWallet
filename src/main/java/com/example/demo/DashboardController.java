@@ -3,14 +3,21 @@ package com.example.demo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 /*************************************************************************************
@@ -52,9 +59,37 @@ public class DashboardController extends NavBarController{
     }
 
     public void createNewWalletOnAction(){
-//        ask wallet name
-        walletTileCreation("New Wallet");
-//        add the wallet to the database
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setTitle("Add new wallet");
+        window.setWidth(600);
+
+        Label label = new Label();
+        label.setText("Wallet to add :");
+        label.setFont(new Font("Liberation Mono",15));
+        label.setTextFill(Color.WHITE);
+
+        TextField textField = new TextField();
+
+        Button button = new Button("Add new wallet");
+        button.setTextFill(Color.WHITE);
+
+        button.setStyle("-fx-background-color: #4990B8; -fx-background-radius: 20");
+        button.setOnAction(event1 ->  {
+            String walletName = textField.getText();
+            walletTileCreation(walletName);
+            window.close();
+        });
+
+        VBox layout = new VBox(10);
+        layout.setStyle("-fx-background-color: #010831");
+        layout.getChildren().addAll(label, textField, button);
+        layout.setAlignment(Pos.CENTER);
+
+        Scene scene = new Scene(layout);
+        window.setScene(scene);
+        window.showAndWait();
+//      todo:  add the wallet to the database
     }
 
     public void walletTileCreation(String walletName){
@@ -88,14 +123,13 @@ public class DashboardController extends NavBarController{
         vBox.getChildren().add(name);
 
 //      get wallet value
-
         Double walletValue = 15.00;
         Label value = new Label(walletValue+" usdt");
         value.setFont(new Font("Liberation Mono",25));
         value.setStyle("-fx-text-fill: WHITE;");
         vBowWalletValues.getChildren().add(value);
 
-//      get wallet var
+//      get wallet change
         Double walletVar = 1.5;
         Label var = new Label(walletVar + "%");
         var.setFont(new Font("Liberation Mono",25));
