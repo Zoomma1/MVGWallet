@@ -36,7 +36,7 @@ public class CoinrankinAPITools {
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
         JSONObject jsonString = (JSONObject) jsonParser.parse(response.body());
-        Double coinPrice = (Double) ((JSONObject) jsonString.get("data")).get("price");
+        Double coinPrice = Double.parseDouble((String) ((JSONObject)((JSONObject) jsonString.get("data")).get("coin")).get("price"));
         return coinPrice;
     }
 
