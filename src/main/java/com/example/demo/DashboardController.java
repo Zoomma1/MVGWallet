@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import Entity.Singleton;
+import Entity.User;
+import Entity.Wallet;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -20,6 +23,9 @@ import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+
 /*************************************************************************************
  *This is the DashboardPageController class it is used to control the DashboardPage  *
  *                                                                                   *
@@ -57,7 +63,6 @@ public class DashboardController extends NavBarController{
     public void myAccountOnAction(ActionEvent event) throws IOException, InterruptedException {
         switchPage(event, "MyAccountPage.fxml");
     }
-
     public void createNewWalletOnAction(){
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
@@ -92,8 +97,8 @@ public class DashboardController extends NavBarController{
 //      todo:  add the wallet to the database
     }
 
-    public void walletTileCreation(String walletName){
-//      todo: create wallets using the user owned wallets and display a sparkline base on its value over time (I think we will display them with a one day interval)
+    public void walletTileCreation(String walletName) throws SQLException, NoSuchAlgorithmException {
+//      todo: create wallets using the user owned wallets and display a sparkline base on its value over time (I think we will display them with a one day interval
         VBox vBox = new VBox();
         VBox vBowWalletValues = new VBox();
         HBox hBox = new HBox();

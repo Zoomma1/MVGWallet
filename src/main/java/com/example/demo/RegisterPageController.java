@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import Entity.User;
+import Entity.UserRepository;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +14,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+
+import static Entity.UserRepository.hashingWord;
 
 /*************************************************************************************
  *This is the RegisterPageController class it is used to control the                 *
@@ -33,12 +40,14 @@ public class RegisterPageController {
     private Stage stage;
     private Scene scene;
     private Parent root;
-    private CSVLogin csvLogin = new CSVLogin();
+    private User utilisateur = LoginPageController.utilisateur;
+    private UserRepository sql = new UserRepository();
 
-    public void registerOnAction(ActionEvent event) throws IOException {
+    public void registerOnAction(ActionEvent event) throws IOException, NoSuchAlgorithmException, SQLException {
 //      todo: sql database for register
         if(!username.getText().equals("") && !email.getText().equals("") && !password.getText().equals("") && password.getText().equals(password1.getText()) && Email.isEmailValid(email.getText())){
-            csvLogin.setNewUserData(username.getText() + "," + email.getText() + "," + csvLogin.encryptPassword(password.getText()));
+            sql.insertToUser(username.getText(), hashingWord(password.getText()),"1",email.getText(),new Timestamp(System.currentTimeMillis()),false);
+            System.out.println("User inscrit");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginPage.fxml"));
             root = loader.load();
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
