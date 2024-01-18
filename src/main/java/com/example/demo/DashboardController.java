@@ -3,6 +3,7 @@ package com.example.demo;
 import Entity.Singleton;
 import Entity.User;
 import Entity.Wallet;
+import Entity.WalletRepository;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -20,11 +21,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.scene.chart.XYChart;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /*************************************************************************************
  *This is the DashboardPageController class it is used to control the DashboardPage  *
@@ -38,9 +45,24 @@ public class DashboardController extends NavBarController{
     @FXML
     ScrollPane scrollPane;
 
+    CoinrankinAPITools coinrankinAPITools = new CoinrankinAPITools();
+    AlphaVantageAPITools alphaVantageAPITools = new AlphaVantageAPITools();
+
+    public String jsonCoinrankingFiftyBestCoins;
+
     @Override
-    public void initialize() throws InterruptedException, IOException {
-        super.initialize();
+    public void initialize(){
+        try{
+            jsonCoinrankingFiftyBestCoins = coinrankinAPITools.getFiftyBestCoins();
+            User utilisateur = Singleton.getInstance().getCurrentUser();
+            WalletRepository repo = new WalletRepository();
+            ArrayList<String> portefeuilleArray = repo.findByUserId(utilisateur.getId());
+            for(String portefeuille : portefeuilleArray){
+                walletTileCreation(portefeuille);
+            }
+        }catch (SQLException | NoSuchAlgorithmException | IOException | InterruptedException e){
+            throw new RuntimeException(e);
+        }
     }
 
     public void cryptocurrencyOnAction(ActionEvent event) throws IOException, InterruptedException {
@@ -63,7 +85,7 @@ public class DashboardController extends NavBarController{
     public void myAccountOnAction(ActionEvent event) throws IOException, InterruptedException {
         switchPage(event, "MyAccountPage.fxml");
     }
-    public void createNewWalletOnAction(){
+    public void createNewWalletOnAction() {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Add new wallet");
@@ -82,7 +104,11 @@ public class DashboardController extends NavBarController{
         button.setStyle("-fx-background-color: #4990B8; -fx-background-radius: 20");
         button.setOnAction(event1 ->  {
             String walletName = textField.getText();
-            walletTileCreation(walletName);
+            try {
+                walletTileCreation(walletName);
+            } catch (SQLException | NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
             window.close();
         });
 
@@ -94,11 +120,68 @@ public class DashboardController extends NavBarController{
         Scene scene = new Scene(layout);
         window.setScene(scene);
         window.showAndWait();
-//      todo:  add the wallet to the database
     }
 
-    public void walletTileCreation(String walletName) throws SQLException, NoSuchAlgorithmException {
-//      todo: create wallets using the user owned wallets and display a sparkline base on its value over time (I think we will display them with a one day interval
+    public void walletTileCreation(String wallet_id) throws SQLException, NoSuchAlgorithmException {
+        User utilisateur = Singleton.getInstance().getCurrentUser();
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("name");
+        WalletRepository repo = new WalletRepository();
+        String walletId = User.checkRegex(repo.findBySelectedAndId(utilisateur.getId()).toString(),"\\d{1,9}");
+        ArrayList<String> symboles = WalletRepository.selectWhereStatic(columns,"crypto","id_wallet",walletId);
+        ArrayList<String> stocks = WalletRepository.selectWhereStatic(columns,"stocks","id_wallet",walletId);
+        ArrayList<String> finalSymboles = new ArrayList<>();
+        ArrayList<String> finalStocks = new ArrayList<>();
+        for (String symbole: symboles) {
+            finalSymboles.add(User.checkRegex(symbole,"[A-Z]+"));
+        }
+        for (String stock: stocks) {
+            finalStocks.add(User.checkRegex(stock,"[A-Z]+"));
+        }
+//      todo: create wallets tiles using the user owned wallets and display a sparkline base on its value over time (I think we will display them with a one day interval)
+/*
+        Double[] sparkline = new Double[28];
+        for(String sbl: symboles){
+            try {
+                JSONParser jsonParser = new JSONParser();
+                JSONObject jsonData = (JSONObject) jsonParser.parse(jsonCoinrankingFiftyBestCoins);
+                JSONArray coinsArray = (JSONArray) ((JSONObject) jsonData.get("data")).get("coins");
+
+                for (Object coinObj : coinsArray) {
+                    JSONObject coin = (JSONObject) coinObj;
+                    String symbol = (String) coin.get("symbol");
+
+                    if (sbl.equals(symbol)) {
+                        JSONArray sparklineArray = (JSONArray) coin.get("sparkline");
+
+                        if (sparkline != null) {
+                            for (int i = 0; i < sparkline.length; i++) {
+                                sparkline[i]= sparkline[i] + Double.parseDouble(sparklineArray.get(i).toString());
+                            }
+                            System.out.println(sparklineArray);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        String[] shareSparkline;
+        for (String stock : stocks){
+            try {
+                shareSparkline = alphaVantageAPITools.getShareSparkline(stock,"5min");
+                System.out.println(shareSparkline);
+            } catch (IOException | InterruptedException | ParseException e) {
+                throw new RuntimeException(e);
+            }
+            for (int i = 0; i < shareSparkline.length; i++) {
+                sparkline[i] = sparkline[i] + Double.parseDouble(shareSparkline[i]);
+            }
+        }
+        */
+
+
         VBox vBox = new VBox();
         VBox vBowWalletValues = new VBox();
         HBox hBox = new HBox();
@@ -116,26 +199,28 @@ public class DashboardController extends NavBarController{
             if(!isSelected){
                 vBox.getStyleClass().add("vBoxWalletDashboardSelected");
                 vBox.getStyleClass().remove("vBoxWalletDashboard");
+//              todo: set wallet to selected in dbb and set all other wallets to not selected
             }
             else{
                 vBox.getStyleClass().add("vBoxWalletDashboard");
                 vBox.getStyleClass().remove("vBoxWalletDashboardSelected");
+//              todo: same thing but the opposite
             }
         });
 
-        Label name = new Label(walletName);
+        Label name = new Label(wallet_id);
         name.setFont(new Font("Liberation Mono",33));
         vBox.getChildren().add(name);
 
-//      get wallet value
-        Double walletValue = 15.00;
+//        Double walletValue = sparkline[sparkline.length - 1];
+        Double walletValue = 2.0;
         Label value = new Label(walletValue+" usdt");
         value.setFont(new Font("Liberation Mono",25));
         value.setStyle("-fx-text-fill: WHITE;");
         vBowWalletValues.getChildren().add(value);
 
-//      get wallet change
-        Double walletVar = 1.5;
+//        Double walletVar = (sparkline[sparkline.length - 1] - sparkline[0])/sparkline[sparkline.length - 1];
+        Double walletVar = 2.5;
         Label var = new Label(walletVar + "%");
         var.setFont(new Font("Liberation Mono",25));
         var.setStyle("-fx-text-fill: #06f516;");
@@ -147,8 +232,14 @@ public class DashboardController extends NavBarController{
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
         LineChart<Number,Number> lineChart = new LineChart<Number,Number>(xAxis,yAxis);
-        hBox.getChildren().add(lineChart);
 
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+//        for (int i = 0; i < sparkline.length; i++) {
+//            series.getData().add(new XYChart.Data<>(i + 1, sparkline[i]));
+//        }
+        lineChart.getData().add(series);
+
+        hBox.getChildren().add(lineChart);
         vBox.getChildren().add(hBox);
 
         tilePane.getChildren().add(tilePane.getChildren().size() - 1 ,vBox);

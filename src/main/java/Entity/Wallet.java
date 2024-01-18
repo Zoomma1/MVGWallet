@@ -6,15 +6,21 @@ import Entity.WalletRepository;
 
 import java.sql.SQLException;
 
+import static Entity.UserRepository.checkRegex;
+
 public class Wallet {
 
     private boolean selected;
+    private int id;
     private int userId;
     private WalletRepository repository = new WalletRepository();
 
     public Wallet(int userId, boolean selected) {
         this.userId = userId;
         this.selected = selected;
+    }
+    public Wallet(int id) {
+        this.id = id;
     }
 
     public boolean isSelected() {
@@ -34,5 +40,11 @@ public class Wallet {
     }
     public void createWallet() throws SQLException {
         repository.createWallet(this.userId,this.selected);
+    }
+    public static Wallet createEntity(int userId) throws SQLException {
+        WalletRepository repo = new WalletRepository();
+        String id = repo.findBySelectedAndId(userId).toString();
+        String x = checkRegex(id,"\\d{1,9}");
+        return new Wallet(Integer.parseInt(x));
     }
 }

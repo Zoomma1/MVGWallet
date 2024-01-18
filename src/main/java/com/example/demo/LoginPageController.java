@@ -48,9 +48,8 @@ public class LoginPageController {
     public void loginOnAction(ActionEvent event) throws IOException, NoSuchAlgorithmException, MessagingException, InterruptedException {
         if(username != null && password != null && !username.getText().isEmpty() && !password.getText().isEmpty()){
             if(sql.checkKnowUser(username.getText(),hashingWord(password.getText()))){
-                utilisateur = new User(username.getText(),password.getText());
+                utilisateur = new User(username.getText(),hashingWord(password.getText()));
                 utilisateur.sendLoginEmail();
-                // mettre l'objet User dans une classe unique, afin de la balader dans tout le projet
                 Singleton.getInstance().setCurrentUser(utilisateur);
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("DashboardPage.fxml"));
                 root = loader.load();
@@ -78,11 +77,14 @@ public class LoginPageController {
         stage.show();
     }
 
-    public void loginOnEnter(KeyEvent keyEvent) throws IOException {
+    public void loginOnEnter(KeyEvent keyEvent) throws IOException, MessagingException, InterruptedException, NoSuchAlgorithmException {
         if(keyEvent.getCode() == ENTER){
             if(username != null && password != null && !username.getText().isEmpty() && !password.getText().isEmpty()){
-                if(sql.checkKnowUser(username.getText(),password.getText())){
-                    utilisateur = new User(username.getText(),password.getText());
+                if(sql.checkKnowUser(username.getText(),hashingWord(password.getText()))){
+                    utilisateur = new User(username.getText(),hashingWord(password.getText()));
+                    utilisateur.sendLoginEmail();
+                    // mettre l'objet User dans une classe unique, afin de la balader dans tout le projet
+                    Singleton.getInstance().setCurrentUser(utilisateur);
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("DashboardPage.fxml"));
                     root = loader.load();
                     stage = (Stage)((Node)keyEvent.getSource()).getScene().getWindow();
@@ -98,7 +100,7 @@ public class LoginPageController {
             }
         }
     }
-//    todo: stayconnected
+//    todo: oui
     public void stayConnected(){
     }
 }

@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import Entity.Singleton;
+import Entity.User;
+import Entity.Wallet;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -21,6 +24,9 @@ import org.json.simple.parser.ParseException;
 
 import java.awt.*;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /*************************************************************************************
@@ -39,7 +45,7 @@ public class StockPageController extends NavBarController{
     public void initialize() throws InterruptedException, IOException {
         try {
             displayStock();
-        }catch (ParseException e) {
+        }catch (ParseException | SQLException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }
@@ -71,8 +77,10 @@ public class StockPageController extends NavBarController{
         tilePane.getChildren().add(tilePane.getChildren().size() - 1, (new Tile(symbol,iconUrl,price,change,sparkline)).displayStockTile());
     }
 
-    public void displayStock() throws IOException, InterruptedException, ParseException {
+    public void displayStock() throws IOException, InterruptedException, ParseException, SQLException, NoSuchAlgorithmException {
 //      todo: get the user followed stocks from sql database
+        User utilisateur = Singleton.getInstance().getCurrentUser();
+        Wallet selectedWallet = Wallet.createEntity(utilisateur.getId());
 //      todo: this one is for me tho add a button to add a new followed stock
         String[] userFollowedStocks = {"MSFT","AAPL"};
 

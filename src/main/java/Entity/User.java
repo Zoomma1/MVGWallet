@@ -64,4 +64,12 @@ public class User extends UserRepository{
     public int getId() throws NoSuchAlgorithmException, SQLException {
         return new UserRepository().findIdByPassword(hashingWord(this.password));
     }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
 }

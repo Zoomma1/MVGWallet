@@ -38,7 +38,7 @@ public class WalletRepository {
 
     private ArrayList<String> selectWhere(ArrayList<String> columns, String tables, String columnCondition, String columnResult) throws SQLException {
         String queryTable = String.join(",", columns);
-        String sql = String.format("SELECT %s FROM %s WHERE %s = '%s';", queryTable, tables, columnCondition, columnResult);
+        String sql = String.format("SELECT %s FROM %s WHERE (%s) = (%s);", queryTable, tables, columnCondition, columnResult);
         ResultSet res = stmt.executeQuery(sql);
         ResultSetMetaData metaData = res.getMetaData();
         int columnCount = metaData.getColumnCount();
@@ -57,7 +57,6 @@ public class WalletRepository {
                         String stringValue = res.getString(i);
                         resultBuilder.append(columnName).append(": ").append(stringValue);
                         break;
-                    // Ajouter plus de types ici si nécessaire
                     default:
                         Object objValue = res.getObject(i);
                         resultBuilder.append(columnName).append(": ").append(objValue);
@@ -247,10 +246,86 @@ public class WalletRepository {
     }
     public ArrayList<String> findByUserId(int userId) throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
-        columns.add(String.format("%d",userId));
+        columns.add("*");
         return selectWhere(columns,"wallet","user_id",String.format("%d",userId));
     }
     public void createWallet(int user_id, boolean selected) throws SQLException {
         insertToWallet(user_id,selected);
+    }
+    public ArrayList<String> findBySelectedAndId(int id) throws SQLException {
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("*");
+        return selectWhere(columns,"wallet","user_id, selected",String.format("'%d','1'",id));
+    }
+    public static ArrayList<String> selectWhereStatic(ArrayList<String> columns, String tables, String columnCondition, String columnResult) throws SQLException {
+        Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://176.147.224.139:3306/MVGWallet_DBB", "MVGWallet", "wGtv[Db&Wymu*ht!YmKTxwFz5T;?vQ");
+        Statement stmt = conn.createStatement();
+        String queryTable = String.join(",", columns);
+        String sql = String.format("SELECT %s FROM %s WHERE (%s) = (%s);", queryTable, tables, columnCondition, columnResult);
+        ResultSet res = stmt.executeQuery(sql);
+        ResultSetMetaData metaData = res.getMetaData();
+        int columnCount = metaData.getColumnCount();
+        ArrayList<String> results = new ArrayList<>();
+        while (res.next()) {
+            StringBuilder resultBuilder = new StringBuilder();
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName = metaData.getColumnName(i);
+                int type = metaData.getColumnType(i);
+                switch (type) {
+                    case Types.INTEGER:
+                        int intValue = res.getInt(i);
+                        resultBuilder.append(columnName).append(": ").append(intValue);
+                        break;
+                    case Types.VARCHAR:
+                        String stringValue = res.getString(i);
+                        resultBuilder.append(columnName).append(": ").append(stringValue);
+                        break;
+                    default:
+                        Object objValue = res.getObject(i);
+                        resultBuilder.append(columnName).append(": ").append(objValue);
+                        break;
+                }
+                if (i < columnCount) {
+                    resultBuilder.append(", ");
+                }
+            }
+            results.add(resultBuilder.toString());
+        }
+        return results;
+    }
+    public static void insertIntoTable(String tableName, ArrayList<String> columns, ArrayList<String> values) throws SQLException {
+        PreparedStatement pstmt = null;
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(
+                    "jdbc:mysql://176.147.224.139:3306²/MVGWallet_DBB", "MVGWallet", "wGtv[Db&Wymu*ht!YmKTxwFz5T;?vQ");
+            StringBuilder sql = new StringBuilder("INSERT INTO " + tableName + " (");
+            for (int i = 0; i < columns.size(); i++) {
+                sql.append(columns.get(i));
+                if (i < columns.size() - 1) {
+                    sql.append(", ");
+                }
+            }
+            sql.append(") VALUES (");
+            for (int i = 0; i < values.size(); i++) {
+                sql.append("?");
+                if (i < values.size() - 1) {
+                    sql.append(", ");
+                }
+            }
+            sql.append(");");
+
+            pstmt = conn.prepareStatement(sql.toString());
+
+            for (int i = 0; i < values.size(); i++) {
+                pstmt.setString(i + 1, values.get(i));
+            }
+
+            pstmt.executeUpdate();
+        } finally {
+            if (pstmt != null) pstmt.close();
+            if (conn != null) conn.close();
+        }
     }
 }

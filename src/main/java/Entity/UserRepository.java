@@ -26,7 +26,7 @@ public class UserRepository {
         }
     }
 
-    public String checkRegex(String text, String regex){
+    public static String checkRegex(String text, String regex){
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(text);
         if (matcher.find()) {
@@ -243,7 +243,7 @@ public class UserRepository {
     public int findIdByPassword(String password) throws NoSuchAlgorithmException, SQLException {
         ArrayList<String> columns = new ArrayList<>();
         columns.add("id");
-        String listId = selectWhere(columns,"users","password",hashingWord(password));
+        String listId = selectWhere(columns,"users","password",Singleton.getInstance().getCurrentUser().password);
         String x = checkRegex(listId,"\\d{1,9}");
         return Integer.parseInt(x);
     }
