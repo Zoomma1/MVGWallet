@@ -1,5 +1,9 @@
 package com.example.demo;
 
+import Entity.Singleton;
+import Entity.User;
+import Entity.Wallet;
+import Entity.WalletRepository;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -8,6 +12,9 @@ import javafx.scene.control.TextField;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 /*************************************************************************************
  *This is the TradesPageController class it is used to control the TradesPage        *
  *                                                                                   *
@@ -61,12 +68,18 @@ public class TradesPageController extends NavBarController{
 //todo: /!\ Check all todos
 //todo: add a warning in case user doesnt have enough to buy or sell
     @Override
-    public void initialize() throws InterruptedException, IOException {
+    public void initialize() throws InterruptedException, IOException, SQLException {
 //        todo: get user wallet tokens and shares
-        tokenBuyChoiceBox.getItems().addAll("BTC"); //todo: add all tokens here
-        tokenSellChoiceBox.getItems().addAll("BTC"); //todo: add all tokens here
-        shareBuyChoiceBox.getItems().addAll("MSFT","AAPL"); //todo: add all shares here
-        shareSellChoiceBox.getItems().addAll("MSFT","AAPL"); //todo: add all shares here
+        ArrayList<String> cryptos = WalletRepository.getCryptoTradeFromListWallet(Singleton.getInstance().getWallets());
+        ArrayList<String> stocks = WalletRepository.getCStocksTradeFromListWallet(Singleton.getInstance().getWallets());
+        for (String crypto: cryptos) {
+            String name = User.checkRegex(User.checkRegex(crypto,"name: ([A-Z]+)"),"([A-Z]+)");
+            tokenBuyChoiceBox.getItems().addAll(name);
+        }
+        for (String share: stocks) {
+            String name = User.checkRegex(User.checkRegex(share,"name: ([A-Z]+)"),"([A-Z]+)");
+            shareBuyChoiceBox.getItems().addAll(name);
+        }
 
         tokenBuyChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue!=null){

@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import Entity.WalletRepository;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static Entity.UserRepository.checkRegex;
 

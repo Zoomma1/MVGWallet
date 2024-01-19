@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
 /*************************************************************************************
  *This is the NavBarController class it is used to change de Pages of all its        *
  * children class                                                                    *
@@ -44,6 +46,6 @@ public abstract class NavBarController {
         stage.show();
     }
 
-    public void initialize() throws InterruptedException, IOException {
+    public void initialize() throws InterruptedException, IOException, SQLException {
     }
 }

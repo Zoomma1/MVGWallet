@@ -49,7 +49,7 @@ public class LoginPageController {
         if(username != null && password != null && !username.getText().isEmpty() && !password.getText().isEmpty()){
             if(sql.checkKnowUser(username.getText(),hashingWord(password.getText()))){
                 utilisateur = new User(username.getText(),hashingWord(password.getText()));
-                utilisateur.sendLoginEmail();
+                /*utilisateur.sendLoginEmail();*/
                 Singleton.getInstance().setCurrentUser(utilisateur);
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("DashboardPage.fxml"));
                 root = loader.load();
@@ -82,7 +82,7 @@ public class LoginPageController {
             if(username != null && password != null && !username.getText().isEmpty() && !password.getText().isEmpty()){
                 if(sql.checkKnowUser(username.getText(),hashingWord(password.getText()))){
                     utilisateur = new User(username.getText(),hashingWord(password.getText()));
-                    utilisateur.sendLoginEmail();
+                    /*utilisateur.sendLoginEmail();*/
                     // mettre l'objet User dans une classe unique, afin de la balader dans tout le projet
                     Singleton.getInstance().setCurrentUser(utilisateur);
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("DashboardPage.fxml"));

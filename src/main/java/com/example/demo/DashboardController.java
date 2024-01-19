@@ -52,13 +52,14 @@ public class DashboardController extends NavBarController{
 
     @Override
     public void initialize(){
+        User utilisateur = Singleton.getInstance().getCurrentUser();
         try{
             jsonCoinrankingFiftyBestCoins = coinrankinAPITools.getFiftyBestCoins();
-            User utilisateur = Singleton.getInstance().getCurrentUser();
             WalletRepository repo = new WalletRepository();
             ArrayList<String> portefeuilleArray = repo.findByUserId(utilisateur.getId());
+            Singleton.getInstance().setListWallet(portefeuilleArray);
             for(String portefeuille : portefeuilleArray){
-                walletTileCreation(portefeuille);
+                walletTileCreation(String.format("Wallet n°%s",User.checkRegex(User.checkRegex(portefeuille,"id: \\d{1,9},"),"\\d{1,9}")));
             }
         }catch (SQLException | NoSuchAlgorithmException | IOException | InterruptedException e){
             throw new RuntimeException(e);
@@ -105,7 +106,10 @@ public class DashboardController extends NavBarController{
         button.setOnAction(event1 ->  {
             String walletName = textField.getText();
             try {
+                User utilisateur = Singleton.getInstance().getCurrentUser();
                 walletTileCreation(walletName);
+                Wallet newWallet = new Wallet(utilisateur.getId(),false);
+                newWallet.createWallet();
             } catch (SQLException | NoSuchAlgorithmException e) {
                 throw new RuntimeException(e);
             }

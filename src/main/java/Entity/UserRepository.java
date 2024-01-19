@@ -35,6 +35,17 @@ public class UserRepository {
             return null;
         }
     }
+    public static ArrayList<String> checkManyRegex(String text, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(text);
+        ArrayList<String> matches = new ArrayList<>();
+
+        while (matcher.find()) {
+            matches.add(matcher.group());
+        }
+
+        return matches;
+    }
 
     /** @return a String of the builder */
     public String selectWhere(ArrayList<String> columns, String tables, String columnCondition, String columnResult) throws SQLException {

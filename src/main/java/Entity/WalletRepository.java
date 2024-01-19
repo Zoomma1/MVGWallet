@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.regex.*;
 
 public class WalletRepository {
@@ -328,4 +329,31 @@ public class WalletRepository {
             if (conn != null) conn.close();
         }
     }
+    public static ArrayList<String> getCryptoTradeFromListWallet(ArrayList<String> wallets) throws SQLException {
+        ArrayList<String> walletArray = User.checkManyRegex(wallets.toString(),"id: (\\d{1,9}), user_id: \\d+, selected: true");
+        int idWallet = Integer.parseInt(User.checkRegex(walletArray.get(0),"\\d{1,9}"));
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("*");
+        return WalletRepository.selectWhereStatic(columns,"crypto","id_wallet",String.format("%d",idWallet));
+    }
+    public static ArrayList<String> getCStocksTradeFromListWallet(ArrayList<String> wallets) throws SQLException {
+        ArrayList<String> walletArray = User.checkManyRegex(wallets.toString(),"id: (\\d{1,9}), user_id: \\d+, selected: true");
+        int idWallet = Integer.parseInt(User.checkRegex(walletArray.get(0),"\\d{1,9}"));
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("*");
+        return WalletRepository.selectWhereStatic(columns,"stocks","id_wallet",String.format("%d",idWallet));
+    }
+    public static int updateWhereStatic(String table, String columnsValues, String columnCondition, String columnResult) throws SQLException {
+        Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://176.147.224.139:3306/MVGWallet_DBB", "MVGWallet", "wGtv[Db&Wymu*ht!YmKTxwFz5T;?vQ");
+        Statement stmt = conn.createStatement();
+
+        String sql = String.format("UPDATE %s SET %s WHERE %s = '%s';", table, columnsValues, columnCondition, columnResult);
+
+        int result = stmt.executeUpdate(sql);
+        conn.close();
+        return result;
+    }
+
+
 }
